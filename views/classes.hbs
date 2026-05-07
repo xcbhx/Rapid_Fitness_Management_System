@@ -1,0 +1,97 @@
+<h1>Classes</h1>
+
+{{!-- READ Classes Table --}}
+<table>
+    <thead>
+        {{!-- For the table header row, print the DB attribute names --}}
+        <tr>
+            {{#each classes.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{!-- For each row, print the id, class_name, max_capacity, trainer_id, and room_location --}}
+        {{#each classes}}
+        <tr>
+            <td>{{this.class_id}}</td>
+            <td>{{this.class_name}}</td>
+            <td>{{this.max_capacity}}</td>
+            <td>{{this.trainer_id}}</td>
+            <td>{{this.room_location}}</td>
+
+            {{!-- DELETE Class Form--}}
+            <form id="delete_class_form">
+                <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
+                <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
+                <td>
+                    <button type="submit">
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{!-- CREATE Class Form --}}
+<h2>Add a Class</h2>
+<form id="add_class_form">
+    <label for="add_class_title">Class Title: </label>
+    <input type="text" name="add_class_title" id="add_class_title" required />
+
+    <label for="add_class_max_capacity">Max Capacity: </label>
+    <input type="number" name="add_class_max_capacity" id="add_class_max_capacity" required />
+    
+    {{!-- Foreign Key trainer_id --}}
+    <label for="add_class_trainer_id">Assign Trainer: </label>
+    <select name="add_class_trainer_id" id="add_class_trainer_id">
+        <option value="">None (Optional) </option>
+        {{#each trainers}}
+        <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}} </option>
+        {{/each}}
+    </select>
+
+    <label for="add_class_room_location">Room Location: </label>
+    <input type="text" name="add_class_room_location" id="add_class_room_location" required />
+    
+    <input type="submit" />
+</form>
+
+{{!-- UPDATE Class Form --}}
+<h2>Update a Class</h2>
+<form id="update_class_form">
+    <label for="update_class_id">Class to Update: </label>
+    <select name="update_class_id" id="update_class_id" required>
+        <option value="" disabled selected>Select a Class: </option>
+        {{#each classes}}
+        <option value="{{this.class_id}}" >
+            {{this.class_id}}
+            -
+            {{this.class_name}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for="update_class_max_capacity">Max Capacity: </label>
+    <input type="number" name="update_class_max_capacity" id="update_class_max_capacity" required />
+
+    {{!-- Foreign Key trainer_id --}}
+    <label for="update_class_trainer_id">Assign Trainer: </label>
+    <select name="update_class_trainer_id" id="update_class_trainer_id">
+        <option value="">None (Optional) </option>
+        {{#each trainers}}
+        <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}} </option>
+        {{/each}}
+    </select>
+
+    <label for="update_class_room_location">Room Location: </label>
+    <input type="text" name="update_class_room_location" id="update_class_room_location" required />
+    
+    <input type="submit" />
+</form>
