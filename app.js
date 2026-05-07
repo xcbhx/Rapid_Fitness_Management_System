@@ -33,7 +33,20 @@ app.get('/', async function (req, res) {
     }
 });
 
+// GET Trainers page
+app.get('/trainers', function(req, res) {
+    // Display all Trainers
+    let query1 = 'SELECT * FROM Trainers;';
 
+    db.pool.query(query1, function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.render('trainers', { trainers: rows });
+        }
+    });
+});
 
 /*
     LISTENER
