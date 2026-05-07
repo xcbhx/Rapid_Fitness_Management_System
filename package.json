@@ -1,0 +1,29 @@
+{
+  "scripts": {
+    "development": "npx nodemon app.js",
+    "production": "npx forever start app.js",
+    "stop_production": "npx forever stop app.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-handlebars": "^9.0.1",
+    "forever": "^4.0.3",
+    "mysql2": "^3.22.3",
+    "nodemon": "^3.1.14"
+  },
+  "name": "rapid_fitness_system",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xcbhx/Rapid_Fitness_Management_System.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xcbhx/Rapid_Fitness_Management_System/issues"
+  },
+  "homepage": "https://github.com/xcbhx/Rapid_Fitness_Management_System#readme",
+  "description": ""
+}
