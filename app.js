@@ -48,6 +48,39 @@ app.get('/trainers', function(req, res) {
     });
 });
 
+// GET Classes page
+app.get('/classes', function(req, res) {
+    // Display all Classes
+    let query1 = 'SELECT * FROM Classes;';
+    // Display all Trainers
+    let query2 = 'SELECT * FROM Trainers;';
+
+    db.pool.query(query1, function(error, rows, fields) {
+        if (error) {
+            console.log("Query1 Error:");
+            console.log(error);
+            res.sendStatus(400);
+            return;
+        }
+        let classes = rows;
+
+        db.pool.query(query2, function(error, rows, fields) {
+            if (error) {
+                console.log("Query2 Error:");
+                console.log(error);
+                res.sendStatus(400);
+                return;
+            }
+            let trainers = rows;
+
+            res.render('classes', {
+                classes: classes,
+                trainers: trainers
+            });
+        });
+    });
+});
+
 /*
     LISTENER
 */
