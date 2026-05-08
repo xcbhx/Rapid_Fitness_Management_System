@@ -81,6 +81,34 @@ app.get('/classes', function(req, res) {
     });
 });
 
+// GET Classes and Equipments page
+app.get('/classes_equipment', function (req, res) {
+    // Display all Classes
+    let classesQuery = `SELECT class_id, class_name FROM Classes;`;
+    // Display all Equipment_Records
+    let equipmentQuery = `SELECT equipment_id, item_name FROM Equipment_Records;`;
+
+    db.pool.query(classesQuery, function (error, classRows) {
+        if (error) {
+            console.log("Classes query error:", error);
+            return;
+        }
+
+        db.pool.query(equipmentQuery, function (error, equipmentRows) {
+            if (error) {
+                console.log("Equipment query error:", error);
+                return;
+            }
+
+            res.render('classes_equipment', {
+                classes: classRows,
+                equipment_records: equipmentRows
+            });
+        });
+    });
+});
+
+
 /*
     LISTENER
 */
