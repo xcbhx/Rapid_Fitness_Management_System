@@ -53,13 +53,15 @@ DROP TABLE IF EXISTS `Classes_Equipment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Classes_Equipment` (
+  `class_equipment_id` int(11) NOT NULL AUTO_INCREMENT,
   `class_id` int(11) NOT NULL,
   `equipment_id` int(11) NOT NULL,
-  PRIMARY KEY (`class_id`,`equipment_id`),
+  PRIMARY KEY (`class_equipment_id`),
+  UNIQUE KEY `class_id` (`class_id`,`equipment_id`),
   KEY `equipment_id` (`equipment_id`),
   CONSTRAINT `Classes_Equipment_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `Classes` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Classes_Equipment_ibfk_2` FOREIGN KEY (`equipment_id`) REFERENCES `Equipment_Records` (`equipment_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +70,7 @@ CREATE TABLE `Classes_Equipment` (
 
 LOCK TABLES `Classes_Equipment` WRITE;
 /*!40000 ALTER TABLE `Classes_Equipment` DISABLE KEYS */;
-INSERT INTO `Classes_Equipment` VALUES (201,501),(302,502),(403,503);
+INSERT INTO `Classes_Equipment` VALUES (1,201,501),(2,302,502),(3,403,503);
 /*!40000 ALTER TABLE `Classes_Equipment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +91,7 @@ CREATE TABLE `Enrollments` (
   KEY `class_id` (`class_id`),
   CONSTRAINT `Enrollments_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `Members` (`member_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Enrollments_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `Classes` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +100,7 @@ CREATE TABLE `Enrollments` (
 
 LOCK TABLES `Enrollments` WRITE;
 /*!40000 ALTER TABLE `Enrollments` DISABLE KEYS */;
-INSERT INTO `Enrollments` VALUES (101,172,201,'2026-01-12'),(102,421,302,'2026-03-01'),(103,123,403,'2026-02-10');
+INSERT INTO `Enrollments` VALUES (1,172,201,'2026-01-12'),(2,172,302,'2026-01-15'),(3,421,201,'2026-03-01'),(4,123,403,'2026-02-10');
 /*!40000 ALTER TABLE `Enrollments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,4 +223,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-07 12:47:02
+-- Dump completed on 2026-05-07 17:33:11

@@ -35,7 +35,6 @@ CREATE TABLE Members (
 CREATE TABLE Classes (
     class_id INT AUTO_INCREMENT,
     class_name VARCHAR(100) NOT NULL,
-    description TEXT NULL,
     max_capacity INT NOT NULL,
     trainer_id INT NOT NULL,
     room_location VARCHAR(50) NOT NULL,
@@ -63,9 +62,11 @@ CREATE TABLE Enrollments (
 );
 
 CREATE TABLE Classes_Equipment (
+    class_equipment_id INT AUTO_INCREMENT,
     class_id INT NOT NULL,
     equipment_id INT NOT NULL,
-    PRIMARY KEY (class_id, equipment_id),
+    UNIQUE (class_id, equipment_id),
+    PRIMARY KEY (class_equipment_id),
     FOREIGN KEY (class_id) REFERENCES Classes(class_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (equipment_id) REFERENCES Equipment_Records(equipment_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
