@@ -1,0 +1,103 @@
+<h1>Trainers</h1>
+
+{{!-- READ Trainers Table --}}
+<table>
+    <thead>
+        {{!-- For the table header row, print the DB attribute names --}}
+        <tr>
+            {{#each trainers.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{!-- For each row, print the id, first_name, last_name, specialization, and hourly_rate --}}
+        {{#each trainers}}
+        <tr>
+            <td>{{this.trainer_id}}</td>
+            <td>{{this.first_name}}</td>
+            <td>{{this.last_name}}</td>
+            <td>{{this.specialization}}</td>
+            <td>{{this.hourly_rate}}</td>
+
+            {{!-- DELETE Trainer Form--}}
+            <form id="delete_trainer_form">
+                <input type="hidden" name="delete_trainer_id" value="{{this.trainer_id}}" />
+                <input type="hidden" name="delete_trainer_name" value="{{this.first_name}} {{this.last_name}}" />
+                <td>
+                    <button type="submit">
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{!-- CREATE Trainer Form --}}
+<h2>Add a Trainer</h2>
+<form id="add_trainer_form">
+    <label for="add_trainer_first_name">First Name: </label>
+    <input type="text" name="add_trainer_first_name" id="add_trainer_first_name" required />
+
+    <label for="add_trainer_last_name">Last Name: </label>
+    <input type="text" name="add_trainer_last_name" id="add_trainer_last_name" required />
+
+    <label for="add_trainer_specialization">Specialization: </label>
+    <select name="add_trainer_specialization" id="add_trainer_specialization">
+        <option value="NULL" disabled selected>Select a Specialization: </option>
+        <option value="HIIT">HIIT</option>
+        <option value="Spinning">Spinning</option>
+        <option value="Barre and Pilates">Barre and Pilates</option>
+        <option value="Yoga">Yoga</option>
+        <option value="Strength Training">Strength Training</option>
+        <option value="Weight Loss">Weight Loss</option>
+        <option value="Pre and Post-Natal">Pre and Post-Natal</option>
+        <option value="Nutrition">Nutrition</option>
+    </select>
+
+    <label for="add_trainer_hourly_rate">Hourly Rate: </label>
+    <input type="number" name="add_trainer_hourly_rate" id="add_trainer_hourly_rate" min="0" step="0.01" placeholder="0.00" required />
+
+    <input type="submit" />
+</form>
+
+{{!-- UPDATE Trainer Form --}}
+<h2>Update a Trainer</h2>
+<form id="update_trainer_form">
+    <label for="update_trainer_id">Trainer to Update: </label>
+    <select name="update_trainer_id" id="update_trainer_id" required>
+        <option value="" disabled selected>Select a Trainer: </option>
+        {{#each trainers}}
+        <option value="{{this.trainer_id}}" >
+            {{this.trainer_id}}
+            -
+            {{this.first_name}}
+            {{this.last_name}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for="update_trainer_specialization">Specialization: </label>
+    <select name="update_trainer_specialization" id="update_trainer_specialization">
+        <option value="NULL" disabled selected>Select a Specialization: </option>
+        <option value="HIIT">HIIT</option>
+        <option value="Spinning">Spinning</option>
+        <option value="Barre and Pilates">Barre and Pilates</option>
+        <option value="Yoga">Yoga</option>
+        <option value="Strength Training">Strength Training</option>
+        <option value="Weight Loss">Weight Loss</option>
+        <option value="Pre and Post-Natal">Pre and Post-Natal</option>
+        <option value="Nutrition">Nutrition</option>
+    </select>
+
+    <label for="update_trainer_hourly_rate">Hourly Rate: </label>
+    <input type="number" name="update_trainer_hourly_rate" id="update_trainer_hourly_rate" min="0" step="0.01" placeholder="0.00" />
+
+    <input type="submit" />
+</form>
