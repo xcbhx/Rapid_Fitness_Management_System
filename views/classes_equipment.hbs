@@ -1,0 +1,22 @@
+<h1>Classes and Equipment</h1>
+
+{{!-- CREATE Classes & Equipment Form --}}
+<form id="add_class_id">
+    <label for="add_class_id">Class: </label>
+    <select name="add_class_id" id="add_class_id">
+        <option value="">Select a Class: </option>
+        {{#each classes}}
+        <option value="{{this.class_id}}">{{this.class_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="add_equipment_id">Equipment: </label>
+    <select name="add_equipment_id" id="add_equipment_id">
+        <option value="">Select a Equipment: </option>
+        {{#each equipment_records}}
+        <option value="{{this.equipment_id}}">{{this.item_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
