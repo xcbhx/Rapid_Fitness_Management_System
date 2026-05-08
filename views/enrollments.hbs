@@ -1,0 +1,19 @@
+<form id="add-enrollment-form" method="POST" action="/add-enrollment">
+    <label for="input-member">Member: </label>
+    <select name="input-member" id="input-member">
+        <option value="">Select a member</option>
+        {{#each members}}
+        <option value="{{this.member_id}}">{{this.member_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-class">Class: </label>
+    <select name="input-class" id="input-class">
+        <option value="">Select a class</option>
+        {{#each classes}}
+        <option value="{{this.class_id}}">{{this.class_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>

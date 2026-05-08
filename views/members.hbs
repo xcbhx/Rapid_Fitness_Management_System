@@ -1,0 +1,56 @@
+<h2>Gym Members</h2>
+
+{{!-- 1. The Browse Table --}}
+<table id="members-table" border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Trainer</th>
+            <th>Membership Start Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.member_id}}</td>
+            <td>{{this.first_name}}</td>
+            <td>{{this.last_name}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.trainer_id}}</td>
+            <td>{{this.membership_start_date}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<hr>
+
+{{!-- 2. The Add Member Form --}}
+<h3>Add a New Member</h3>
+<form id="add-member-form" method="POST" action="/add-member">
+    <label for="first_name">First Name:</label>
+    <input type="text" name="first_name" id="first_name" required>
+
+    <label for="last_name">Last Name:</label>
+    <input type="text" name="last_name" id="last_name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required>
+
+    <label for="join_date">Membership Start Date:</label>
+    <input type="date" name="membership_start_date" id="membership_start_date" required>
+
+    {{!-- THE DROPDOWN RULE: Using <select> for the Foreign Key --}}
+    <label for="trainer_id">Assigned Trainer:</label>
+    <select name="trainer_id" id="trainer_id">
+        <option value="">None (Optional)</option>
+        {{#each trainers}}
+        <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit" value="Add Member">
+</form>

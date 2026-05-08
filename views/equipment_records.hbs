@@ -1,0 +1,49 @@
+<h2>Equipment Inventory & Maintenance</h2>
+
+{{!-- Browse Table --}}
+<table id="equipment-table" border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Item Name</th>
+            <th>Maintenance Status</th>
+            <th>Purchase Date</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.equipment_id}}</td>
+            <td>{{this.item_name}}</td>
+            <td>{{this.maintenance_status}}</td>
+            <td>{{this.purchase_date}}</td>
+            <td>{{this.location}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<hr>
+
+{{!-- Add Equipment Form --}}
+<h3>Add New Equipment</h3>
+<form id="add-equipment-form" method="POST" action="/add-equipment">
+    <label for="item_name">Item Name:</label>
+    <input type="text" name="item_name" id="item_name" required>
+
+    <label for="maintenance_status">Status:</label>
+    <select name="maintenance_status" id="maintenance_status" required>
+        <option value="Good">Good</option>
+        <option value="Needs repair">Needs repair</option>
+        <option value="In maintenance">In maintenance</option>
+    </select>
+
+    <label for="purchase_date">Purchase Date:</label>
+    <input type="date" name="purchase_date" id="purchase_date" required>
+
+    <label for="location">Location:</label>
+    <input type="text" name="location" id="location" placeholder="e.g. Cardio Zone" required>
+
+    <input type="submit" value="Add Equipment">
+</form>
