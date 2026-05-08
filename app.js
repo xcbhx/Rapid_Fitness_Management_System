@@ -89,7 +89,8 @@ app.get('/members', function(req, res) {
         let members = rows;
         db.pool.query(query2, (error, rows, fields) => {
             let trainers = rows;
-            res.render('members', { data: members, trainers: trainers });
+            // Ceina - passed members as members instead of data
+            res.render('members', { members: members, trainers: trainers });
         });
     });
 });
@@ -121,7 +122,8 @@ app.get('/equipment_records', function(req, res) {
             res.sendStatus(400);
         } else {
             // Render equipment_records.hbs and pass the rows as data
-            res.render('equipment_records', { data: rows });
+            // Ceina - passing rows as equipment_records 
+            res.render('equipment_records', { equipment_records: rows });
         }
     });
 });
@@ -145,23 +147,37 @@ app.post('/add-equipment', function(req, res) {
 
 // GET Enrollments page
 app.get('/enrollments', function(req, res) {
-    let query1 = `SELECT Enrollments.enrollment_id, Members.first_name, Members.last_name,
-                  Classes.class_name, Enrollments.signup_date
-                  FROM Enrollments
-                  JOIN Members ON Enrollments.member_id = Members.member_id
-                  JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
-
+    // let query1 = `SELECT Enrollments.enrollment_id, Members.first_name, Members.last_name,
+    //               Classes.class_name, Enrollments.signup_date
+    //               FROM Enrollments
+    //               JOIN Members ON Enrollments.member_id = Members.member_id
+    //               JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
+    let query1 = "SELECT * FROM Enrollments;";
     let query2 = "SELECT member_id, CONCAT(first_name, ' ', last_name) AS member_name FROM Members;";
     let query3 = "SELECT class_id, class_name FROM Classes;";
 
     db.pool.query(query1, function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            return res.sendStatus(400);
+        }
         let enrollments = rows;
+
         db.pool.query(query2, (error, rows, fields) => {
+            if (error) {
+                console.log(error);
+                return res.sendStatus(400);
+            }
             let members = rows;
             db.pool.query(query3, (error, rows, fields) => {
+                if (error) {
+                    console.log(error);
+                    return res.sendStatus(400);
+                }
                 let classes = rows;
+                // Ceina - passing enrollments as enrollments 
                 res.render('enrollments', {
-                    data: enrollments,
+                    enrollments: enrollments,
                     members: members,
                     classes: classes
                 });
