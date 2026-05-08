@@ -59,7 +59,6 @@ VALUES (:class_name_input, :max_capacity_input, :trainer_id_from_dropdown, :room
 -- UPDATE: edit class details
 UPDATE Classes
 SET class_name = :class_name_input,
-    description = :description_input,
     max_capacity = :max_capacity_input,
     trainer_id = :trainer_id_from_dropdown,
     room_location = :room_location_input

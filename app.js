@@ -54,7 +54,7 @@ app.get('/classes', function(req, res) {
     let query1 = 'SELECT class_id, class_name, max_capacity, trainer_id, room_location FROM Classes;';    // Display all Trainers
     let query2 = 'SELECT * FROM Trainers;';
 
-    db.pool.query(query1, function(error, rows,) {
+    db.pool.query(query1, function(error, rows) {
         if (error) {
             console.log("Query1 Error:");
             console.log(error);
@@ -63,7 +63,7 @@ app.get('/classes', function(req, res) {
         }
         let classes = rows;
 
-        db.pool.query(query2, function(error, rows,) {
+        db.pool.query(query2, function(error, rows) {
             if (error) {
                 console.log("Query2 Error:");
                 console.log(error);
