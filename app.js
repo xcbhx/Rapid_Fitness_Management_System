@@ -51,11 +51,10 @@ app.get('/trainers', function(req, res) {
 // GET Classes page
 app.get('/classes', function(req, res) {
     // Display all Classes
-    let query1 = 'SELECT * FROM Classes;';
-    // Display all Trainers
+    let query1 = 'SELECT class_id, class_name, max_capacity, trainer_id, room_location FROM Classes;';    // Display all Trainers
     let query2 = 'SELECT * FROM Trainers;';
 
-    db.pool.query(query1, function(error, rows, fields) {
+    db.pool.query(query1, function(error, rows,) {
         if (error) {
             console.log("Query1 Error:");
             console.log(error);
@@ -64,7 +63,7 @@ app.get('/classes', function(req, res) {
         }
         let classes = rows;
 
-        db.pool.query(query2, function(error, rows, fields) {
+        db.pool.query(query2, function(error, rows,) {
             if (error) {
                 console.log("Query2 Error:");
                 console.log(error);
@@ -146,14 +145,12 @@ app.post('/add-equipment', function(req, res) {
 
 // GET Enrollments page
 app.get('/enrollments', function(req, res) {
-    // Join Members and Classes to get names
     let query1 = `SELECT Enrollments.enrollment_id, Members.first_name, Members.last_name,
                   Classes.class_name, Enrollments.signup_date
                   FROM Enrollments
                   JOIN Members ON Enrollments.member_id = Members.member_id
                   JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
 
-    // Get data for dropdowns
     let query2 = "SELECT member_id, CONCAT(first_name, ' ', last_name) AS member_name FROM Members;";
     let query3 = "SELECT class_id, class_name FROM Classes;";
 
@@ -172,6 +169,34 @@ app.get('/enrollments', function(req, res) {
         });
     });
 });
+
+// GET Classes and Equipments page
+app.get('/classes_equipment', function (req, res) {
+    // Display all Classes
+    let classesQuery = `SELECT class_id, class_name FROM Classes;`;
+    // Display all Equipment_Records
+    let equipmentQuery = `SELECT equipment_id, item_name FROM Equipment_Records;`;
+
+    db.pool.query(classesQuery, function (error, classRows) {
+        if (error) {
+            console.log("Classes query error:", error);
+            return;
+        }
+
+        db.pool.query(equipmentQuery, function (error, equipmentRows) {
+            if (error) {
+                console.log("Equipment query error:", error);
+                return;
+            }
+
+            res.render('classes_equipment', {
+                classes: classRows,
+                equipment_records: equipmentRows
+            });
+        });
+    });
+});
+
 /*
     LISTENER
 */

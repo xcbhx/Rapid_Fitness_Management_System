@@ -1,5 +1,26 @@
 -- Group 2: Ceina Ellison, Eman Alturky
 
+------
+-- TRAINERS PAGE
+------
+-- SELECT: get all trainers to display in the browse table
+SELECT * FROM Trainers;
+
+-- INSERT: add a new trainer
+INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
+VALUES (:first_name_input, :last_name_input, :specialization_input, :hourly_rate_input);
+
+-- UPDATE: edit trainer details
+UPDATE Trainers
+SET first_name = :first_name_input,
+    last_name = :last_name_input,
+    specialization = :specialization_input,
+    hourly_rate = :hourly_rate_input
+WHERE trainer_id = :trainer_id_selected_from_table;
+
+-- DELETE: remove a trainer
+DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
+
 -----
 -- MEMBERS PAGE
 -----
@@ -24,27 +45,6 @@ WHERE member_id = :member_id_selected_from_table;
 -- DELETE: remove a member from the database
 DELETE FROM Members WHERE member_id = :member_id_selected_from_table;
 
-------
--- TRAINERS PAGE
-------
--- SELECT: get all trainers to display in the browse table
-SELECT * FROM Trainers;
-
--- INSERT: add a new trainer
-INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
-VALUES (:first_name_input, :last_name_input, :specialization_input, :hourly_rate_input);
-
--- UPDATE: edit trainer details
-UPDATE Trainers
-SET first_name = :first_name_input,
-    last_name = :last_name_input,
-    specialization = :specialization_input,
-    hourly_rate = :hourly_rate_input
-WHERE trainer_id = :trainer_id_selected_from_table;
-
--- DELETE: remove a trainer
-DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
-
 -----
 -- CLASSES PAGE
 -----
@@ -53,8 +53,8 @@ DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
 SELECT * FROM Classes;
 
 -- INSERT: add a new fitness class
-INSERT INTO Classes (class_name, description, max_capacity, trainer_id, room_location)
-VALUES (:class_name_input, :description_input, :max_capacity_input, :trainer_id_from_dropdown, :room_location_input);
+INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
+VALUES (:class_name_input, :max_capacity_input, :trainer_id_from_dropdown, :room_location_input);
 
 -- UPDATE: edit class details
 UPDATE Classes
@@ -111,7 +111,7 @@ DELETE FROM Enrollments WHERE enrollment_id = :enrollment_id_selected;
 -----
 
 -- SELECT: list which equipment is assigned to which class
-SELECT Classes.class_name, Equipment_Records.item_name
+SELECT Classes_Equipment.class_equipment_id, Classes.class_name, Equipment_Records.item_name
 FROM Classes_Equipment
 JOIN Classes ON Classes_Equipment.class_id = Classes.class_id
 JOIN Equipment_Records ON Classes_Equipment.equipment_id = Equipment_Records.equipment_id;
