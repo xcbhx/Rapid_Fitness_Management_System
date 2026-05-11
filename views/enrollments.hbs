@@ -1,6 +1,31 @@
+<h2>Class Enrollments</h2>
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Member ID</th>
+            <th>Class ID</th>
+            <th>Signup Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each enrollments}}
+        <tr>
+            <td>{{this.enrollment_id}}</td>
+            <td>{{this.member_id}}</td>
+            <td>{{this.class_id}}</td>
+            <td>{{this.signup_date}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<hr>
+
+<h3>Enroll a Member</h3>
 <form id="add-enrollment-form" method="POST" action="/add-enrollment">
     <label for="input-member">Member: </label>
-    <select name="input-member" id="input-member">
+    <select name="input-member" id="input-member" required>
         <option value="">Select a member</option>
         {{#each members}}
         <option value="{{this.member_id}}">{{this.member_name}}</option>
@@ -8,12 +33,12 @@
     </select>
 
     <label for="input-class">Class: </label>
-    <select name="input-class" id="input-class">
+    <select name="input-class" id="input-class" required>
         <option value="">Select a class</option>
         {{#each classes}}
         <option value="{{this.class_id}}">{{this.class_name}}</option>
         {{/each}}
     </select>
 
-    <input type="submit">
+    <input type="submit" value="Enroll">
 </form>
