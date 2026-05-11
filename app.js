@@ -122,7 +122,7 @@ app.get('/equipment_records', function(req, res) {
             res.sendStatus(400);
         } else {
             // Render equipment_records.hbs and pass the rows as data
-            // Ceina - passing rows as equipment_records 
+            // Ceina - passing rows as equipment_records
             res.render('equipment_records', { equipment_records: rows });
         }
     });
@@ -183,6 +183,30 @@ app.get('/enrollments', function(req, res) {
                 });
             });
         });
+    });
+});
+
+// POST route Enrollments page
+app.post('/add-enrollment', function(req, res)
+{
+    // capture data from the form
+    let data = req.body;
+
+    // prepare the query
+    let query1 = `INSERT INTO Enrollments (member_id, class_id, signup_date)
+                  VALUES (?, ?, CURRENT_DATE())`;
+
+    let inserts = [data['input-member'], data['input-class']];
+
+    // run the query
+    db.pool.query(query1, inserts, function(error, rows, fields){
+        if (error){
+            console.log(error);
+            res.sendStatus(400);
+        } else{
+            // send user back to enrollments page to see new record
+            res.redirect('/enrollments');
+        }
     });
 });
 
