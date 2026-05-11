@@ -175,7 +175,7 @@ app.get('/enrollments', function(req, res) {
                     return res.sendStatus(400);
                 }
                 let classes = rows;
-                // Ceina - passing enrollments as enrollments
+                // Ceina - passing enrollments as enrollments 
                 res.render('enrollments', {
                     enrollments: enrollments,
                     members: members,
