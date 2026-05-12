@@ -1,20 +1,28 @@
 <h2>Class Enrollments</h2>
-<table border="1" cellpadding="5">
+
+{{!-- 1. BROWSE TABLE --}}
+<table id="enrollments-table" border="1" cellpadding="5">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Member ID</th>
-            <th>Class ID</th>
+            <th>Enrollment ID</th>
+            <th>Member Name</th>
+            <th>Class Name</th>
             <th>Signup Date</th>
-        </tr>
+            <th>Action</th> </tr>
     </thead>
     <tbody>
         {{#each enrollments}}
         <tr>
             <td>{{this.enrollment_id}}</td>
-            <td>{{this.member_id}}</td>
-            <td>{{this.class_id}}</td>
+            <td>{{this.first_name}} {{this.last_name}}</td>
+            <td>{{this.class_name}}</td>
             <td>{{this.signup_date}}</td>
+            <td>
+                <form method="POST" action="/delete-enrollment" style="display:inline;">
+                    <input type="hidden" name="enrollment_id" value="{{this.enrollment_id}}">
+                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to unenroll this member?')">
+                </form>
+            </td>
         </tr>
         {{/each}}
     </tbody>
@@ -22,13 +30,14 @@
 
 <hr>
 
+{{!-- 2. ADD ENROLLMENT FORM --}}
 <h3>Enroll a Member</h3>
 <form id="add-enrollment-form" method="POST" action="/add-enrollment">
     <label for="input-member">Member: </label>
     <select name="input-member" id="input-member" required>
         <option value="">Select a member</option>
         {{#each members}}
-        <option value="{{this.member_id}}">{{this.member_name}}</option>
+        <option value="{{this.member_id}}">{{this.first_name}} {{this.last_name}}</option>
         {{/each}}
     </select>
 
@@ -40,16 +49,17 @@
         {{/each}}
     </select>
 
-    <input type="submit" value="Enroll">
+    <input type="submit" value="Enroll Member">
 </form>
 
 <hr>
+
+{{!-- 3. UPDATE ENROLLMENT FORM --}}
 <h3>Update an Enrollment</h3>
-<p>To update an existing enrollment, select the ID from the dropdown and choose the new details.</p>
 <form id="update-enrollment-form" method="POST" action="/update-enrollment">
     <label for="update-id">Enrollment ID: </label>
     <select name="update-id" id="update-id" required>
-        <option value="">Select an ID</option>
+        <option value="">Select an ID to update</option>
         {{#each enrollments}}
         <option value="{{this.enrollment_id}}">{{this.enrollment_id}}</option>
         {{/each}}
@@ -71,5 +81,5 @@
         {{/each}}
     </select>
 
-    <input type="submit" value="Update Enrollment">
+    <input type="submit" value="Update enrollment">
 </form>
