@@ -147,12 +147,12 @@ app.post('/add-equipment', function(req, res) {
 
 // GET Enrollments page
 app.get('/enrollments', function(req, res) {
-    // let query1 = `SELECT Enrollments.enrollment_id, Members.first_name, Members.last_name,
-    //               Classes.class_name, Enrollments.signup_date
-    //               FROM Enrollments
-    //               JOIN Members ON Enrollments.member_id = Members.member_id
-    //               JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
-    let query1 = "SELECT * FROM Enrollments;";
+    let query1 = `SELECT Enrollments.enrollment_id, Members.first_name, Members.last_name,
+                  Classes.class_name, Enrollments.signup_date
+                  FROM Enrollments
+                  JOIN Members ON Enrollments.member_id = Members.member_id
+                  JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
+    // let query1 = "SELECT * FROM Enrollments;";
     let query2 = "SELECT member_id, first_name, last_name FROM Members;";
     let query3 = "SELECT class_id, class_name FROM Classes;";
 
@@ -230,6 +230,24 @@ app.post('/update-enrollment', function(req, res){
             res.sendStatus(400);
         } else{
             // redirect back to see updated table row
+            res.redirect('/enrollments');
+        }
+    });
+});
+
+// POST route to delete an enrollment
+app.post('/delete-enrollment', function(req, res) {
+    let data = req.body;
+    let enrollmentID = parseInt(data['enrollment_id']);
+
+    let query = `DELETE FROM Enrollments WHERE enrollment_id = ?`;
+
+    db.pool.query(query, [enrollmentID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Error:", error);
+            res.sendStatus(400);
+        } else {
+            // refresh the page so the row disappears from the table
             res.redirect('/enrollments');
         }
     });
