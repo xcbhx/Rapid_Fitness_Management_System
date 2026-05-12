@@ -1,22 +1,77 @@
-<h1>Classes and Equipment</h1>
+<h2>Classes and Equipment Assignments</h2>
 
-{{!-- CREATE Classes & Equipment Form --}}
-<form id="add_class_id">
-    <label for="add_class_id">Class: </label>
-    <select name="add_class_id" id="add_class_id">
-        <option value="">Select a Class: </option>
+{{!-- Browse Table --}}
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Class Name</th>
+            <th>Equipment Item</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.class_equipment_id}}</td>
+            <td>{{this.class_name}}</td>
+            <td>{{this.item_name}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<hr>
+
+{{!-- CREATE Classes and Equipment form --}}
+<h3>Assign Equipment to a Class</h3>
+<form method="POST" action="/add-class-equipment">
+    <label for="input-class">Class: </label>
+    <select name="input-class" id="input-class" required>
+        <option value="">Select a Class</option>
         {{#each classes}}
         <option value="{{this.class_id}}">{{this.class_name}}</option>
         {{/each}}
     </select>
 
-    <label for="add_equipment_id">Equipment: </label>
-    <select name="add_equipment_id" id="add_equipment_id">
-        <option value="">Select a Equipment: </option>
+    <label for="input-equipment">Equipment: </label>
+    <select name="input-equipment" id="input-equipment" required>
+        <option value="">Select Equipment</option>
         {{#each equipment_records}}
         <option value="{{this.equipment_id}}">{{this.item_name}}</option>
         {{/each}}
     </select>
 
-    <input type="submit">
+    <input type="submit" value="Assign Equipment">
+</form>
+
+<hr>
+
+{{!-- UPDATE Assignment Form --}}
+<h3>Update an Assignment</h3>
+<form method="POST" action="/update-class-equipment">
+    <label for="update-id">Assignment ID: </label>
+    <select name="update-id" id="update-id" required>
+        <option value="">Select an ID</option>
+        {{#each data}}
+        <option value="{{this.class_equipment_id}}">{{this.class_equipment_id}}</option>
+        {{/each}}
+    </select>
+
+    <label for="update-class">New Class: </label>
+    <select name="update-class" id="update-class" required>
+        <option value="">Select a Class</option>
+        {{#each classes}}
+        <option value="{{this.class_id}}">{{this.class_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="update-equipment">New Equipment: </label>
+    <select name="update-equipment" id="update-equipment" required>
+        <option value="">Select Equipment</option>
+        {{#each equipment_records}}
+        <option value="{{this.equipment_id}}">{{this.item_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit" value="Update Assignment">
 </form>
