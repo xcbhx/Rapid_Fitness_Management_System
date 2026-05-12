@@ -42,3 +42,34 @@
 
     <input type="submit" value="Enroll">
 </form>
+
+<hr>
+<h3>Update an Enrollment</h3>
+<p>To update an existing enrollment, select the ID from the dropdown and choose the new details.</p>
+<form id="update-enrollment-form" method="POST" action="/update-enrollment">
+    <label for="update-id">Enrollment ID: </label>
+    <select name="update-id" id="update-id" required>
+        <option value="">Select an ID</option>
+        {{#each enrollments}}
+        <option value="{{this.enrollment_id}}">{{this.enrollment_id}}</option>
+        {{/each}}
+    </select>
+
+    <label for="update-member">New Member: </label>
+    <select name="update-member" id="update-member" required>
+        <option value="">Select a member</option>
+        {{#each members}}
+        <option value="{{this.member_id}}">{{this.first_name}} {{this.last_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="update-class">New Class: </label>
+    <select name="update-class" id="update-class" required>
+        <option value="">Select a class</option>
+        {{#each classes}}
+        <option value="{{this.class_id}}">{{this.class_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit" value="Update Enrollment">
+</form>

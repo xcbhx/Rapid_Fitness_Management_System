@@ -153,7 +153,7 @@ app.get('/enrollments', function(req, res) {
     //               JOIN Members ON Enrollments.member_id = Members.member_id
     //               JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
     let query1 = "SELECT * FROM Enrollments;";
-    let query2 = "SELECT member_id, CONCAT(first_name, ' ', last_name) AS member_name FROM Members;";
+    let query2 = "SELECT member_id, first_name, last_name FROM Members;";
     let query3 = "SELECT class_id, class_name FROM Classes;";
 
     db.pool.query(query1, function(error, rows, fields) {
@@ -175,7 +175,7 @@ app.get('/enrollments', function(req, res) {
                     return res.sendStatus(400);
                 }
                 let classes = rows;
-                // Ceina - passing enrollments as enrollments 
+                // Ceina - passing enrollments as enrollments
                 res.render('enrollments', {
                     enrollments: enrollments,
                     members: members,
@@ -205,6 +205,31 @@ app.post('/add-enrollment', function(req, res)
             res.sendStatus(400);
         } else{
             // send user back to enrollments page to see new record
+            res.redirect('/enrollments');
+        }
+    });
+});
+
+// POST route to UPDATE Enrollments
+app.post('/update-enrollment', function(req, res){
+    let data = req.body;
+
+    let enrollment_id = parseInt(data['update-id']);
+    let member_id = parseInt(data['update-member']);
+    let class_id = parseInt(data['update-class']);
+
+    // query to update the row where the enrollment id matches the one selected
+    let query = `UPDATE Enrollments
+                 SET member_id = ?, class_id = ?
+                 WHERE enrollment_id = ?`;
+    let values = [member_id, class_id, enrollment_id];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error){
+            console.log("Update error:", error);
+            res.sendStatus(400);
+        } else{
+            // redirect back to see updated table row
             res.redirect('/enrollments');
         }
     });
