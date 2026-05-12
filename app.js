@@ -153,7 +153,7 @@ app.get('/enrollments', function(req, res) {
     //               JOIN Members ON Enrollments.member_id = Members.member_id
     //               JOIN Classes ON Enrollments.class_id = Classes.class_id;`;
     let query1 = "SELECT * FROM Enrollments;";
-    let query2 = "SELECT member_id, CONCAT(first_name, ' ', last_name) AS member_name FROM Members;";
+    let query2 = "SELECT member_id, first_name, last_name FROM Members;";
     let query3 = "SELECT class_id, class_name FROM Classes;";
 
     db.pool.query(query1, function(error, rows, fields) {
