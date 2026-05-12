@@ -255,28 +255,75 @@ app.post('/delete-enrollment', function(req, res) {
 
 // GET Classes and Equipments page
 app.get('/classes_equipment', function (req, res) {
+    let query1 = `SELECT Classes_Equipment.class_equipment_id, Classes.class_name, Equipment_Records.item_name
+                  FROM Classes_Equipment
+                  JOIN Classes ON Classes_Equipment.class_id = Classes.class_id
+                  JOIN Equipment_Records ON Classes_Equipment.equipment_id = Equipment_Records.equipment_id;`;
+
     // Display all Classes
     let classesQuery = `SELECT class_id, class_name FROM Classes;`;
+
     // Display all Equipment_Records
     let equipmentQuery = `SELECT equipment_id, item_name FROM Equipment_Records;`;
 
-    db.pool.query(classesQuery, function (error, classRows) {
-        if (error) {
-            console.log("Classes query error:", error);
-            return;
+    db.pool.query(query1, function (error, browseRows){
+        if (error){
+            console.log("Browse query error:", error);
+            return res.sendStatus(400);
         }
 
-        db.pool.query(equipmentQuery, function (error, equipmentRows) {
+        db.pool.query(classesQuery, function (error, classRows) {
             if (error) {
-                console.log("Equipment query error:", error);
+                console.log("Classes query error:", error);
                 return;
             }
 
-            res.render('classes_equipment', {
-                classes: classRows,
-                equipment_records: equipmentRows
+            db.pool.query(equipmentQuery, function (error, equipmentRows) {
+                if (error) {
+                console.log("Equipment query error:", error);
+                return;
+                }
+
+                res.render('classes_equipment', {
+                    data: browseRows, //sends the table data
+                    classes: classRows, // sends class dropdown data
+                    equipment_records: equipmentRows // sends equipment dropdown data
+                });
             });
         });
+    });
+});
+
+// POST route to add a new class_equipment assignment
+app.post('/add-class-equipment', function(req, res) {
+    let data = req.body;
+
+    let query = `INSERT INTO Classes_Equipment (class_id, equipment_id) VALUES (?, ?)`;
+    let values = [data['input-class'], data['input-equipment']];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Add M:M Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes_equipment');
+        }
+    });
+});
+
+// POST route to UPDATE Class_Equipment assignment
+app.post('/update-class-equipment', function(req, res) {
+    let data = req.body;
+    let query = `UPDATE Classes_Equipment SET class_id = ?, equipment_id = ? WHERE class_equipment_id = ?`;
+    let values = [data['update-class'], data['update-equipment'], data['update-id']];
+
+    db.pool.query(query, values, function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes_equipment');
+        }
     });
 });
 
