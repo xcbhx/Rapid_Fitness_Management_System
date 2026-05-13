@@ -3,14 +3,12 @@
 {{!-- READ Trainers Table --}}
 <table>
     <thead>
-        {{!-- For the table header row, print the DB attribute names --}}
         <tr>
-            {{#each trainers.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-            <th></th>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Specialization</th>
+            <th>Hourly Rate</th>
         </tr>
     </thead>
 

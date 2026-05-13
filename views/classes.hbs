@@ -1,16 +1,14 @@
 <h1>Classes</h1>
 
 {{!-- READ Classes Table --}}
-<table>
+<table id="classes_table" border="1" cellpadding="5">
     <thead>
-        {{!-- For the table header row, print the DB attribute names --}}
         <tr>
-            {{#each classes.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
-            <th></th>
+            <th>ID</th>
+            <th>Class Name</th>
+            <th>Max Capacity</th>
+            <th>Trainer ID</th>
+            <th>Room Location</th>
         </tr>
     </thead>
 
