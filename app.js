@@ -327,6 +327,24 @@ app.post('/update-class-equipment', function(req, res) {
     });
 });
 
+// POST route to delete Classes_Equipment assignment
+app.post('/delete-class-equipment', function(req, res) {
+    let data = req.body;
+    let assignmentID = parseInt(data['class_equipment_id']);
+
+    let query = `DELETE FROM Classes_Equipment WHERE class_equipment_id = ?`;
+
+    db.pool.query(query, [assignmentID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Error:", error);
+            res.sendStatus(400);
+        } else {
+            // Refresh to see the item gone from the table
+            res.redirect('/classes_equipment');
+        }
+    });
+});
+
 /*
     LISTENER
 */
