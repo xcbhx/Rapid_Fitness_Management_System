@@ -7,7 +7,7 @@
             <th>ID</th>
             <th>Class Name</th>
             <th>Max Capacity</th>
-            <th>Trainer ID</th>
+            <th>Trainer Name</th>
             <th>Room Location</th>
         </tr>
     </thead>
@@ -19,7 +19,7 @@
             <td>{{this.class_id}}</td>
             <td>{{this.class_name}}</td>
             <td>{{this.max_capacity}}</td>
-            <td>{{this.trainer_id}}</td>
+            <td>{{this.first_name}} {{this.last_name}}</td>
             <td>{{this.room_location}}</td>
 
             {{!-- DELETE Class Form--}}
@@ -75,6 +75,9 @@
         </option>
         {{/each}}
     </select>
+    
+    <label for="update_class_name">Class Name: </label>
+    <input type="text" name="update_class_name" id="update_class_name">
 
     <label for="update_class_max_capacity">Max Capacity: </label>
     <input type="number" name="update_class_max_capacity" id="update_class_max_capacity" required />

@@ -51,7 +51,19 @@ app.get('/trainers', function(req, res) {
 // GET Classes page
 app.get('/classes', function(req, res) {
     // Display all Classes
-    let query1 = 'SELECT class_id, class_name, max_capacity, trainer_id, room_location FROM Classes;';    // Display all Trainers
+    let query1 = `
+    SELECT 
+        Classes.class_id, 
+        Classes.class_name, 
+        Classes.max_capacity,
+        Classes.room_location,
+        Trainers.first_name,
+        Trainers.last_name
+    FROM Classes
+    LEFT JOIN Trainers
+        ON Classes.trainer_id = Trainers.trainer_id;
+    `;    
+    // Display all Trainers
     let query2 = 'SELECT * FROM Trainers;';
 
     db.pool.query(query1, function(error, rows) {

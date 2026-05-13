@@ -36,7 +36,7 @@ CREATE TABLE Classes (
     class_id INT AUTO_INCREMENT,
     class_name VARCHAR(100) NOT NULL,
     max_capacity INT NOT NULL,
-    trainer_id INT NOT NULL,
+    trainer_id INT NULL,
     room_location VARCHAR(50) NOT NULL,
     PRIMARY KEY (class_id),
     FOREIGN KEY (trainer_id) REFERENCES Trainers(trainer_id) ON DELETE CASCADE ON UPDATE CASCADE
