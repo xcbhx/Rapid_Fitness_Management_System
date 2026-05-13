@@ -19,7 +19,12 @@
             <td>{{this.class_id}}</td>
             <td>{{this.class_name}}</td>
             <td>{{this.max_capacity}}</td>
-            <td>{{this.first_name}} {{this.last_name}}</td>
+            <td>{{#if this.first_name}} 
+                    {{this.first_name}} {{this.last_name}}
+                {{else}}
+                    Unassigned
+                {{/if}}
+            </td>
             <td>{{this.room_location}}</td>
 
             {{!-- DELETE Class Form--}}
