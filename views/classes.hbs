@@ -27,8 +27,9 @@
             </td>
             <td>{{this.room_location}}</td>
 
+            <td>
             {{!-- DELETE Class Form--}}
-            <form class="delete_class_form" onsubmit="return confirmClassDelete(this)">
+            <form class="delete_class_form" action="/delete-class" method="POST">
                 <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
                 <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
                 <td>
@@ -37,6 +38,7 @@
                     </button>
                 </td>
             </form>
+            </td>
         </tr>
         {{/each}}
     </tbody>
@@ -44,7 +46,7 @@
 
 {{!-- CREATE Class Form --}}
 <h2>Add a Class</h2>
-<form id="add_class_form">
+<form id="add_class_form" action="/add-class" method="POST">
     <label for="add_class_title">Class Title: </label>
     <input type="text" name="add_class_title" id="add_class_title" required />
 
@@ -68,7 +70,7 @@
 
 {{!-- UPDATE Class Form --}}
 <h2>Update a Class</h2>
-<form id="update_class_form">
+<form id="update_class_form" action="/update-class" method="POST">
     <label for="update_class_id">Class to Update: </label>
     <select name="update_class_id" id="update_class_id" required>
         <option value="" disabled selected>Select a Class: </option>
@@ -99,5 +101,5 @@
     <label for="update_class_room_location">Room Location: </label>
     <input type="text" name="update_class_room_location" id="update_class_room_location" required />
     
-    <input type="submit" />
+    <button type="submit">Add Class</button>
 </form>
