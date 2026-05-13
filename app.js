@@ -48,10 +48,104 @@ app.get('/trainers', function(req, res) {
     });
 });
 
+// CREATE Trainer
+app.post('/add-trainer', function(req, res) {
+
+    let data = req.body;
+
+    let query = `
+        INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
+        VALUES (?, ?, ?, ?)
+    `;
+
+    let values = [
+        data.add_trainer_first_name,
+        data.add_trainer_last_name,
+        data.add_trainer_specialization,
+        data.add_trainer_hourly_rate
+    ];
+
+    db.pool.query(query, values, function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/trainers');
+        }
+    });
+});
+
+// UPDATE Trainer
+app.post('/update-trainer', function(req, res, next) {
+    let data = req.body;
+
+    let trainerID = data.update_trainer_id;
+    let firstName = data.update_trainer_first_name;
+    let lastName = data.update_trainer_last_name;
+    let specialization = data.update_trainer_specialization;
+    let hourlyRate = data.update_trainer_hourly_rate;
+
+    let queryUpdateTrainer = `
+        UPDATE Trainers
+        SET first_name = ?,
+            last_name = ?,
+            specialization = ?,
+            hourly_rate = ?
+        WHERE trainer_id = ?;
+    `;
+
+    let queryParameters = [
+        firstName,
+        lastName,
+        specialization,
+        hourlyRate,
+        trainerID
+    ];
+
+    db.pool.query(queryUpdateTrainer, queryParameters, function(error, rows, fields) {
+
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/trainers');
+        }
+    });
+});
+
+// DELETE Trainer
+app.post('/delete-trainer', function(req, res) {
+
+    let trainerID = parseInt(req.body.delete_trainer_id);
+
+    let query = `DELETE FROM Trainers WHERE trainer_id = ?`;
+
+    db.pool.query(query, [trainerID], function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/trainers');
+        }
+    });
+});
+
 // GET Classes page
 app.get('/classes', function(req, res) {
     // Display all Classes
-    let query1 = 'SELECT class_id, class_name, max_capacity, trainer_id, room_location FROM Classes;';    // Display all Trainers
+    let query1 = `
+    SELECT 
+        Classes.class_id, 
+        Classes.class_name, 
+        Classes.max_capacity,
+        Classes.room_location,
+        Trainers.first_name,
+        Trainers.last_name
+    FROM Classes
+    LEFT JOIN Trainers
+        ON Classes.trainer_id = Trainers.trainer_id;
+    `;    
+    // Display all Trainers
     let query2 = 'SELECT * FROM Trainers;';
 
     db.pool.query(query1, function(error, rows) {
@@ -80,6 +174,79 @@ app.get('/classes', function(req, res) {
     });
 });
 
+// CREATE Class 
+app.post('/add-class', function(req, res) {
+    let data = req.body;
+
+    let query = `
+        INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
+        VALUES (?, ?, ?, ?)
+    `;
+
+    let values = [
+        data.add_class_title,
+        data.add_class_max_capacity,
+        data.add_class_trainer_id || null,
+        data.add_class_room_location
+    ];
+
+    db.pool.query(query, values, function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes');
+        }
+    });
+});
+
+// UPDATE Class
+app.post('/update-class', function(req, res) {
+    let data = req.body;
+
+    let query = `
+        UPDATE Classes
+        SET class_name = ?,
+            max_capacity = ?,
+            trainer_id = ?,
+            room_location = ?
+        WHERE class_id = ?
+    `;
+
+    let values = [
+        data.update_class_name,
+        data.update_class_max_capacity,
+        data.update_class_trainer_id || null,
+        data.update_class_room_location,
+        data.update_class_id
+    ];
+
+    db.pool.query(query, values, function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes');
+        }
+    });
+});
+
+// DELETE Class
+app.post('/delete-class', function(req, res) {
+    let classID = parseInt(req.body.delete_class_id);
+
+    let query = `DELETE FROM Classes WHERE class_id = ?`;
+
+    db.pool.query(query, [classID], function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes');
+        }
+    });
+});
+
 // GET Members page
 app.get('/members', function(req, res) {
     let query1 = "SELECT * FROM Members;";
@@ -89,7 +256,6 @@ app.get('/members', function(req, res) {
         let members = rows;
         db.pool.query(query2, (error, rows, fields) => {
             let trainers = rows;
-            // Ceina - passed members as members instead of data
             res.render('members', { members: members, trainers: trainers });
         });
     });
@@ -122,7 +288,6 @@ app.get('/equipment_records', function(req, res) {
             res.sendStatus(400);
         } else {
             // Render equipment_records.hbs and pass the rows as data
-            // Ceina - passing rows as equipment_records
             res.render('equipment_records', { equipment_records: rows });
         }
     });
@@ -175,7 +340,6 @@ app.get('/enrollments', function(req, res) {
                     return res.sendStatus(400);
                 }
                 let classes = rows;
-                // Ceina - passing enrollments as enrollments
                 res.render('enrollments', {
                     enrollments: enrollments,
                     members: members,
