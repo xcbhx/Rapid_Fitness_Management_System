@@ -28,7 +28,7 @@
             <td>{{this.room_location}}</td>
 
             {{!-- DELETE Class Form--}}
-            <form id="delete_class_form">
+            <form class="delete_class_form" onsubmit="return confirmClassDelete(this)">
                 <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
                 <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
                 <td>

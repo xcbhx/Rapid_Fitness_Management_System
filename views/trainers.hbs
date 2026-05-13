@@ -23,7 +23,7 @@
             <td>{{this.hourly_rate}}</td>
 
             {{!-- DELETE Trainer Form--}}
-            <form id="delete_trainer_form">
+            <form class="delete_trainer_form" onsubmit="return confirmTrainerDelete(this)">
                 <input type="hidden" name="delete_trainer_id" value="{{this.trainer_id}}" />
                 <input type="hidden" name="delete_trainer_name" value="{{this.first_name}} {{this.last_name}}" />
                 <td>
@@ -99,3 +99,4 @@
 
     <input type="submit" />
 </form>
+
