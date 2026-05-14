@@ -32,7 +32,7 @@
             <form class="delete_class_form" action="/delete_class" method="POST">
                 <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
                 <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
-                <button type="submit"> Delete </button>
+                <button type="submit" value="Delete" onclick="return confirm('Remove this Class?')"> Delete </button>
                 </td>
             </form>
             </td>
