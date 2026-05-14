@@ -8,6 +8,7 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
+            <th>Phone Number</th>
             <th>Trainer</th>
             <th>Membership Start Date</th>
         </tr>
@@ -19,7 +20,14 @@
             <td>{{this.first_name}}</td>
             <td>{{this.last_name}}</td>
             <td>{{this.email}}</td>
-            <td>{{this.trainer_id}}</td>
+            <td>{{this.phone_number}}</td>
+            <td> {{!-- if trainer exists--}}
+                {{#if this.trainer_first}}
+                    {{this.trainer_first}} {{this.trainer_last}}
+                {{else}}
+                    None
+                {{/if}}
+            </td>
             <td>{{this.membership_start_date}}</td>
         </tr>
         {{/each}}
@@ -32,20 +40,23 @@
 <h3>Add a New Member</h3>
 <form id="add-member-form" method="POST" action="/add-member">
     <label for="first_name">First Name:</label>
-    <input type="text" name="first_name" id="first_name" required>
+    <input type="text" name="input-fname" id="first_name" required>
 
     <label for="last_name">Last Name:</label>
-    <input type="text" name="last_name" id="last_name" required>
+    <input type="text" name="input-lname" id="last_name" required>
 
     <label for="email">Email:</label>
-    <input type="email" name="email" id="email" required>
+    <input type="email" name="input-email" id="email" required>
+
+    <label for="input-phone">Phone Number: </label>
+    <input type="tel" name="input-phone" id="input-phone" placeholder="503-555-1234">
 
     <label for="join_date">Membership Start Date:</label>
-    <input type="date" name="membership_start_date" id="membership_start_date" required>
+    <input type="date" name="input-start-date" id="membership_start_date" required>
 
-    {{!-- THE DROPDOWN RULE: Using <select> for the Foreign Key --}}
+    {{!-- Dropdown for FK --}}
     <label for="trainer_id">Assigned Trainer:</label>
-    <select name="trainer_id" id="trainer_id">
+    <select name="input-trainer" id="trainer_id">
         <option value="">None (Optional)</option>
         {{#each trainers}}
         <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}}</option>
