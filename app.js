@@ -41,7 +41,7 @@ app.get('/trainers', function(req, res) {
     db.pool.query(query1, function(error, rows, fields) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
+            return res.status(400).send(error);
         } else {
             res.render('trainers', { trainers: rows });
         }
@@ -49,9 +49,14 @@ app.get('/trainers', function(req, res) {
 });
 
 // CREATE Trainer
-app.post('/add-trainer', function(req, res) {
-
+app.post('/add_trainer', function(req, res) {
     let data = req.body;
+
+    // Convert empty dropdown value into SQL NULL
+    let specialization = 
+        data.add_trainer_specialization == "" 
+            ? null
+            : data.add_trainer_specialization;
 
     let query = `
         INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
@@ -61,14 +66,14 @@ app.post('/add-trainer', function(req, res) {
     let values = [
         data.add_trainer_first_name,
         data.add_trainer_last_name,
-        data.add_trainer_specialization,
+        specialization,
         data.add_trainer_hourly_rate
     ];
 
     db.pool.query(query, values, function(error) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
+            return res.status(400).send(error);
         } else {
             res.redirect('/trainers');
         }
@@ -76,45 +81,83 @@ app.post('/add-trainer', function(req, res) {
 });
 
 // UPDATE Trainer
-app.post('/update-trainer', function(req, res, next) {
+app.post('/update_trainer', function(req, res, next) {
     let data = req.body;
 
-    let trainerID = data.update_trainer_id;
-    let firstName = data.update_trainer_first_name;
-    let lastName = data.update_trainer_last_name;
-    let specialization = data.update_trainer_specialization;
-    let hourlyRate = data.update_trainer_hourly_rate;
+let trainerID = data.update_trainer_id;
 
-    let queryUpdateTrainer = `
-        UPDATE Trainers
-        SET first_name = ?,
-            last_name = ?,
-            specialization = ?,
-            hourly_rate = ?
+    // First get current trainer data
+    let selectQuery = `
+        SELECT * FROM Trainers
         WHERE trainer_id = ?;
     `;
 
-    let queryParameters = [
-        firstName,
-        lastName,
-        specialization,
-        hourlyRate,
-        trainerID
-    ];
-
-    db.pool.query(queryUpdateTrainer, queryParameters, function(error, rows, fields) {
+    db.pool.query(selectQuery, [trainerID], function(error, rows) {
 
         if (error) {
             console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/trainers');
+            return res.status(400).send(error);
         }
+
+        // Trainer not found
+        if (rows.length === 0) {
+            return res.status(404).send("Trainer not found");
+        }
+
+        let currentTrainer = rows[0];
+
+        // Use existing value if field left blank
+        let firstName =
+            !data.update_trainer_first_name
+                ? currentTrainer.first_name
+                : data.update_trainer_first_name;
+
+        let lastName =
+            !data.update_trainer_last_name 
+                ? currentTrainer.last_name
+                : data.update_trainer_last_name;
+
+        let specialization =
+            !data.update_trainer_specialization
+                ? currentTrainer.specialization
+                : data.update_trainer_specialization;
+
+        let hourlyRate =
+            !data.update_trainer_hourly_rate
+                ? currentTrainer.hourly_rate
+                : data.update_trainer_hourly_rate;
+
+        let updateQuery = `
+            UPDATE Trainers
+            SET first_name = ?,
+                last_name = ?,
+                specialization = ?,
+                hourly_rate = ?
+            WHERE trainer_id = ?;
+        `;
+
+        let values = [
+            firstName,
+            lastName,
+            specialization,
+            hourlyRate,
+            trainerID
+        ];
+
+        db.pool.query(updateQuery, values, function(error) {
+
+            if (error) {
+                console.log(error);
+                return res.status(400).send(error);
+            }
+
+            res.redirect('/trainers');
+        });
     });
 });
 
 // DELETE Trainer
-app.post('/delete-trainer', function(req, res) {
+app.post('/delete_trainer', function(req, res) {
 
     let trainerID = parseInt(req.body.delete_trainer_id);
 
@@ -123,7 +166,7 @@ app.post('/delete-trainer', function(req, res) {
     db.pool.query(query, [trainerID], function(error) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
+            return res.status(400).send(error);
         } else {
             res.redirect('/trainers');
         }
@@ -174,9 +217,24 @@ app.get('/classes', function(req, res) {
     });
 });
 
-// CREATE Class
 app.post('/add-class', function(req, res) {
+
     let data = req.body;
+
+    // Convert empty trainer dropdown to NULL
+    let trainerID =
+        data.add_class_trainer_id === ""
+            ? null
+            : data.add_class_trainer_id;
+
+        // Validate required fields
+    if (
+        !data.add_class_title ||
+        !data.add_class_max_capacity ||
+        !data.add_class_room_location
+    ) {
+        return res.status(400).send("Missing required fields");
+    }
 
     let query = `
         INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
@@ -186,7 +244,7 @@ app.post('/add-class', function(req, res) {
     let values = [
         data.add_class_title,
         data.add_class_max_capacity,
-        data.add_class_trainer_id || null,
+        trainerID,
         data.add_class_room_location
     ];
 
@@ -201,38 +259,98 @@ app.post('/add-class', function(req, res) {
 });
 
 // UPDATE Class
-app.post('/update-class', function(req, res) {
+app.post('/update_class', function(req, res) {
     let data = req.body;
 
-    let query = `
-        UPDATE Classes
-        SET class_name = ?,
-            max_capacity = ?,
-            trainer_id = ?,
-            room_location = ?
-        WHERE class_id = ?
+    let classID = data.update_class_id;
+
+    // Get current class data first
+    let selectQuery = `
+        SELECT * FROM Classes
+        WHERE class_id = ?;
     `;
 
-    let values = [
-        data.update_class_name,
-        data.update_class_max_capacity,
-        data.update_class_trainer_id || null,
-        data.update_class_room_location,
-        data.update_class_id
-    ];
-
-    db.pool.query(query, values, function(error) {
+    db.pool.query(selectQuery, [classID], function(error, rows) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/classes');
+            return res.status(400).send(error);
         }
+
+        // Class not found
+        if (rows.length === 0) {
+            return res.status(404).send("Class not found");
+        }
+
+        let currentClass = rows[0];
+
+        // Keep old values if fields left blank
+        let className =
+            data.update_class_name.trim() === ""
+                ? currentClass.class_name
+                : data.update_class_name;
+
+        let maxCapacity =
+            data.update_class_max_capacity === ""
+                ? currentClass.max_capacity
+                : data.update_class_max_capacity;
+
+        let roomLocation =
+            data.update_class_room_location.trim() === ""
+                ? currentClass.room_location
+                : data.update_class_room_location;
+
+        /*
+            Trainer logic:
+            - Empty string = keep current trainer
+            - "null" = remove trainer assignment
+            - Otherwise = new selected trainer
+        */
+
+        let trainerID;
+
+        // Keep current trainer
+        if (data.update_class_trainer_id === "") {
+            trainerID = currentClass.trainer_id;
+        }
+         // Remove trainer assignment
+        else if (data.update_class_trainer_id === "NULL") {
+            trainerID = null;
+        }
+        else {
+        // Assign selected trainer
+            trainerID = data.update_class_trainer_id;
+        }
+
+        let updateQuery = `
+            UPDATE Classes
+            SET class_name = ?,
+                max_capacity = ?,
+                trainer_id = ?,
+                room_location = ?
+            WHERE class_id = ?;
+        `;
+
+        let values = [
+            className,
+            maxCapacity,
+            trainerID,
+            roomLocation,
+            classID
+        ];
+
+        db.pool.query(updateQuery, values, function(error) {
+            if (error) {
+                console.log(error);
+                return res.status(400).send(error);
+            }
+
+            res.redirect('/classes');
+        });
     });
 });
 
 // DELETE Class
-app.post('/delete-class', function(req, res) {
+app.post('/delete_class', function(req, res) {
     let classID = parseInt(req.body.delete_class_id);
 
     let query = `DELETE FROM Classes WHERE class_id = ?`;
@@ -579,11 +697,11 @@ app.get('/classes_equipment', function (req, res) {
 });
 
 // POST route to add a new class_equipment assignment
-app.post('/add-class-equipment', function(req, res) {
+app.post('/add_class_equipment', function(req, res) {
     let data = req.body;
 
     let query = `INSERT INTO Classes_Equipment (class_id, equipment_id) VALUES (?, ?)`;
-    let values = [data['input-class'], data['input-equipment']];
+    let values = [data['input_class'], data['input_equipment']];
 
     db.pool.query(query, values, function(error, rows, fields) {
         if (error) {
@@ -596,23 +714,67 @@ app.post('/add-class-equipment', function(req, res) {
 });
 
 // POST route to UPDATE Class_Equipment assignment
-app.post('/update-class-equipment', function(req, res) {
+app.post('/update_class_equipment', function(req, res) {
     let data = req.body;
-    let query = `UPDATE Classes_Equipment SET class_id = ?, equipment_id = ? WHERE class_equipment_id = ?`;
-    let values = [data['update-class'], data['update-equipment'], data['update-id']];
+    let assignmentID = data.update_id;
 
-    db.pool.query(query, values, function(error) {
+    // Get current assignment data first
+    let selectQuery = `
+        SELECT * FROM Classes_Equipment
+        WHERE class_equipment_id = ?;
+    `;
+
+    db.pool.query(selectQuery, [assignmentID], function(error, rows) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/classes_equipment');
+            return res.status(400).send(error);
         }
+
+        // Assignment not found
+        if (rows.length === 0) {
+            return res.status(404).send("Assignment not found");
+        }
+
+        let currentAssignment = rows[0];
+
+        // Keep current values if left blank
+        let classID =
+            data.update_class === ""
+                ? currentAssignment.class_id
+                : data.update_class;
+
+        let equipmentID =
+            data.update_equipment === ""
+                ? currentAssignment.equipment_id
+                : data.update_equipment;
+
+        let updateQuery = `
+            UPDATE Classes_Equipment
+            SET class_id = ?,
+                equipment_id = ?
+            WHERE class_equipment_id = ?;
+        `;
+
+        let values = [
+            classID,
+            equipmentID,
+            assignmentID
+        ];
+
+        db.pool.query(updateQuery, values, function(error) {
+
+            if (error) {
+                console.log(error);
+                return res.status(400).send(error);
+            }
+
+            res.redirect('/classes_equipment');
+        });
     });
 });
 
 // POST route to delete Classes_Equipment assignment
-app.post('/delete-class-equipment', function(req, res) {
+app.post('/delete_class_equipment', function(req, res) {
     let data = req.body;
     let assignmentID = parseInt(data['class_equipment_id']);
 

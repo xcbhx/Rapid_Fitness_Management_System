@@ -1,7 +1,7 @@
 <h1>Trainers</h1>
 
 {{!-- READ Trainers Table --}}
-<table>
+<table id="classes_table" border="1" cellpadding="5">
     <thead>
         <tr>
             <th>ID</th>
@@ -23,16 +23,12 @@
             <td>{{this.hourly_rate}}</td>
             
             <td>
-            {{!-- DELETE Trainer Form--}}
-            <form class="delete_trainer_form" action="/delete-trainer" method="POST">
-                <input type="hidden" name="delete_trainer_id" value="{{this.trainer_id}}" />
-                <input type="hidden" name="delete_trainer_name" value="{{this.first_name}} {{this.last_name}}" />
-                <td>
-                    <button type="submit">
-                        Delete
-                    </button>
-                </td>
-            </form>
+                {{!-- DELETE Trainer Form--}}
+                <form class="delete_trainer_form" action="/delete_trainer" method="POST">
+                    <input type="hidden" name="delete_trainer_id" value="{{this.trainer_id}}" />
+                    <input type="hidden" name="delete_trainer_name" value="{{this.first_name}} {{this.last_name}}" />
+                    <button type="submit" value="Delete" onclick="return confirm('Remove this Trainer?')"> Delete </button>
+                </form>
             </td>
         </tr>
         {{/each}}
@@ -41,7 +37,7 @@
 
 {{!-- CREATE Trainer Form --}}
 <h2>Add a Trainer</h2>
-<form id="add_trainer_form" action="/add-trainer" method="POST">
+<form id="add_trainer_form" action="/add_trainer" method="POST">
     <label for="add_trainer_first_name">First Name: </label>
     <input type="text" name="add_trainer_first_name" id="add_trainer_first_name" required />
 
@@ -49,8 +45,8 @@
     <input type="text" name="add_trainer_last_name" id="add_trainer_last_name" required />
 
     <label for="add_trainer_specialization">Specialization: </label>
-    <select name="add_trainer_specialization" id="add_trainer_specialization">
-        <option value="NULL" disabled selected>Select a Specialization: </option>
+    <select name="add_trainer_specialization" id="add_trainer_specialization" required>
+        <option value="" disabled selected>Select a Specialization: </option>
         <option value="HIIT">HIIT</option>
         <option value="Spinning">Spinning</option>
         <option value="Barre and Pilates">Barre and Pilates</option>
@@ -64,12 +60,12 @@
     <label for="add_trainer_hourly_rate">Hourly Rate: </label>
     <input type="number" name="add_trainer_hourly_rate" id="add_trainer_hourly_rate" min="0" step="0.01" placeholder="0.00" required />
 
-    <input type="submit" />
+    <button type="submit">Add Trainer</button>
 </form>
 
 {{!-- UPDATE Trainer Form --}}
 <h2>Update a Trainer</h2>
-<form id="update_trainer_form" action="/update-trainer" method="POST">
+<form id="update_trainer_form" action="/update_trainer" method="POST">
     <label for="update_trainer_id">Trainer to Update: </label>
     <select name="update_trainer_id" id="update_trainer_id" required>
         <option value="" disabled selected>Select a Trainer: </option>
@@ -91,7 +87,7 @@
 
     <label for="update_trainer_specialization">Specialization: </label>
     <select name="update_trainer_specialization" id="update_trainer_specialization">
-        <option value="NULL" disabled selected>Select a Specialization: </option>
+        <option value="" disabled selected>Select a Specialization: </option>
         <option value="HIIT">HIIT</option>
         <option value="Spinning">Spinning</option>
         <option value="Barre and Pilates">Barre and Pilates</option>
@@ -105,6 +101,6 @@
     <label for="update_trainer_hourly_rate">Hourly Rate: </label>
     <input type="number" name="update_trainer_hourly_rate" id="update_trainer_hourly_rate" min="0" step="0.01" placeholder="0.00" />
 
-    <button type="submit">Add Trainer</button>
+    <button type="submit">Update Trainer</button>
 </form>
 
