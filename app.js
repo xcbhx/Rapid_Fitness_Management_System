@@ -134,9 +134,9 @@ app.post('/delete-trainer', function(req, res) {
 app.get('/classes', function(req, res) {
     // Display all Classes
     let query1 = `
-    SELECT 
-        Classes.class_id, 
-        Classes.class_name, 
+    SELECT
+        Classes.class_id,
+        Classes.class_name,
         Classes.max_capacity,
         Classes.room_location,
         Trainers.first_name,
@@ -144,7 +144,7 @@ app.get('/classes', function(req, res) {
     FROM Classes
     LEFT JOIN Trainers
         ON Classes.trainer_id = Trainers.trainer_id;
-    `;    
+    `;
     // Display all Trainers
     let query2 = 'SELECT * FROM Trainers;';
 
@@ -174,7 +174,7 @@ app.get('/classes', function(req, res) {
     });
 });
 
-// CREATE Class 
+// CREATE Class
 app.post('/add-class', function(req, res) {
     let data = req.body;
 
@@ -373,6 +373,21 @@ app.get('/equipment_records', function(req, res) {
     });
 });
 
+// POST to delete equipment_records
+app.post('/delete-equipment', function(req, res) {
+    let equipmentID = parseInt(req.body.equipment_id);
+    let query = `DELETE FROM Equipment_Records WHERE equipment_id = ?`;
+
+    db.pool.query(query, [equipmentID], function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment_records');
+        }
+    });
+});
+
 // POST Route to add new equipment
 app.post('/add-equipment', function(req, res) {
     let data = req.body;
@@ -383,6 +398,31 @@ app.post('/add-equipment', function(req, res) {
     db.pool.query(query1, values, function(error, rows, fields) {
         if (error) {
             console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment_records');
+        }
+    });
+});
+
+// POST to UPDATE Equipment
+app.post('/update-equipment', function(req, res) {
+    let data = req.body;
+
+    let equipmentID = parseInt(data['update-id']);
+    let name = data['update-name'];
+    let status = data['update-status'];
+    let location = data['update-location'];
+
+    let query = `UPDATE Equipment_Records
+                 SET item_name = ?, maintenance_status = ?, location = ?
+                 WHERE equipment_id = ?`;
+
+    let values = [name, status, location, equipmentID];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Update Error:", error);
             res.sendStatus(400);
         } else {
             res.redirect('/equipment_records');
