@@ -53,8 +53,8 @@ app.post('/add_trainer', function(req, res) {
     let data = req.body;
 
     // Convert empty dropdown value into SQL NULL
-    let specialization = 
-        data.add_trainer_specialization == "" 
+    let specialization =
+        data.add_trainer_specialization == ""
             ? null
             : data.add_trainer_specialization;
 
@@ -113,7 +113,7 @@ let trainerID = data.update_trainer_id;
                 : data.update_trainer_first_name;
 
         let lastName =
-            !data.update_trainer_last_name 
+            !data.update_trainer_last_name
                 ? currentTrainer.last_name
                 : data.update_trainer_last_name;
 
@@ -369,7 +369,7 @@ app.post('/delete_class', function(req, res) {
 app.get('/members', function(req, res) {
     // JOIN with Trainers to get names instead of raw trainer_id
     let query1 = `SELECT Members.member_id, Members.first_name, Members.last_name,
-                  Members.email, Members.phone_number, Members.membership_start_date,
+                  Members.email, Members.phone_number, Members.trainer_id, Members.membership_start_date,
                   Trainers.first_name AS trainer_first, Trainers.last_name AS trainer_last
                   FROM Members
                   LEFT JOIN Trainers ON Members.trainer_id = Trainers.trainer_id;`;
@@ -589,7 +589,7 @@ app.get('/enrollments', function(req, res) {
 });
 
 // POST route Enrollments page
-app.post('/add-enrollment', function(req, res)
+app.post('/add-class-enrollment', function(req, res)
 {
     // capture data from the form
     let data = req.body;
@@ -774,7 +774,7 @@ app.post('/update_class_equipment', function(req, res) {
 });
 
 // POST route to delete Classes_Equipment assignment
-app.post('/delete_class_equipment', function(req, res) {
+app.post('/delete-class-equipment', function(req, res) {
     let data = req.body;
     let assignmentID = parseInt(data['class_equipment_id']);
 
