@@ -140,6 +140,23 @@ app.post('/add-member', function(req, res) {
     });
 });
 
+// POST route to delete member
+app.post('/delete-member', function(req, res) {
+    let data = req.body;
+    let memberID = parseInt(data['member_id']);
+
+    let query1 = `DELETE FROM Members WHERE member_id = ?`;
+
+    db.pool.query(query1, [memberID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Member Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/members');
+        }
+    });
+});
+
 // GET Equipment Records page
 app.get('/equipment_records', function(req, res) {
     let query1 = "SELECT * FROM Equipment_Records;"; //
