@@ -577,11 +577,11 @@ app.get('/classes_equipment', function (req, res) {
 });
 
 // POST route to add a new class_equipment assignment
-app.post('/add-class-equipment', function(req, res) {
+app.post('/add_class_equipment', function(req, res) {
     let data = req.body;
 
     let query = `INSERT INTO Classes_Equipment (class_id, equipment_id) VALUES (?, ?)`;
-    let values = [data['input-class'], data['input-equipment']];
+    let values = [data['input_class'], data['input_equipment']];
 
     db.pool.query(query, values, function(error, rows, fields) {
         if (error) {
@@ -594,23 +594,67 @@ app.post('/add-class-equipment', function(req, res) {
 });
 
 // POST route to UPDATE Class_Equipment assignment
-app.post('/update-class-equipment', function(req, res) {
+app.post('/update_class_equipment', function(req, res) {
     let data = req.body;
-    let query = `UPDATE Classes_Equipment SET class_id = ?, equipment_id = ? WHERE class_equipment_id = ?`;
-    let values = [data['update-class'], data['update-equipment'], data['update-id']];
+    let assignmentID = data.update_id;
 
-    db.pool.query(query, values, function(error) {
+    // Get current assignment data first
+    let selectQuery = `
+        SELECT * FROM Classes_Equipment
+        WHERE class_equipment_id = ?;
+    `;
+
+    db.pool.query(selectQuery, [assignmentID], function(error, rows) {
         if (error) {
             console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/classes_equipment');
+            return res.status(400).send(error);
         }
+
+        // Assignment not found
+        if (rows.length === 0) {
+            return res.status(404).send("Assignment not found");
+        }
+
+        let currentAssignment = rows[0];
+
+        // Keep current values if left blank
+        let classID =
+            data.update_class === ""
+                ? currentAssignment.class_id
+                : data.update_class;
+
+        let equipmentID =
+            data.update_equipment === ""
+                ? currentAssignment.equipment_id
+                : data.update_equipment;
+
+        let updateQuery = `
+            UPDATE Classes_Equipment
+            SET class_id = ?,
+                equipment_id = ?
+            WHERE class_equipment_id = ?;
+        `;
+
+        let values = [
+            classID,
+            equipmentID,
+            assignmentID
+        ];
+
+        db.pool.query(updateQuery, values, function(error) {
+
+            if (error) {
+                console.log(error);
+                return res.status(400).send(error);
+            }
+
+            res.redirect('/classes_equipment');
+        });
     });
 });
 
 // POST route to delete Classes_Equipment assignment
-app.post('/delete-class-equipment', function(req, res) {
+app.post('/delete_class_equipment', function(req, res) {
     let data = req.body;
     let assignmentID = parseInt(data['class_equipment_id']);
 

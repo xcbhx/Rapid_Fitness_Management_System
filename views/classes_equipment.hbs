@@ -24,17 +24,17 @@
 
 {{!-- CREATE Classes and Equipment form --}}
 <h3>Assign Equipment to a Class</h3>
-<form method="POST" action="/add-class-equipment">
-    <label for="input-class">Class: </label>
-    <select name="input-class" id="input-class" required>
+<form method="POST" action="/add_class_equipment">
+    <label for="input_class">Class: </label>
+    <select name="input_class" id="input_class" required>
         <option value="">Select a Class</option>
         {{#each classes}}
         <option value="{{this.class_id}}">{{this.class_name}}</option>
         {{/each}}
     </select>
 
-    <label for="input-equipment">Equipment: </label>
-    <select name="input-equipment" id="input-equipment" required>
+    <label for="input_equipment">Equipment: </label>
+    <select name="input_equipment" id="input_equipment" required>
         <option value="">Select Equipment</option>
         {{#each equipment_records}}
         <option value="{{this.equipment_id}}">{{this.item_name}}</option>
@@ -48,26 +48,26 @@
 
 {{!-- UPDATE Assignment Form --}}
 <h3>Update an Assignment</h3>
-<form method="POST" action="/update-class-equipment">
-    <label for="update-id">Assignment ID: </label>
-    <select name="update-id" id="update-id" required>
+<form method="POST" action="/update_class_equipment">
+    <label for="update_id">Assignment ID: </label>
+    <select name="update_id" id="update_id" required>
         <option value="">Select an ID</option>
         {{#each data}}
         <option value="{{this.class_equipment_id}}">{{this.class_equipment_id}}</option>
         {{/each}}
     </select>
 
-    <label for="update-class">New Class: </label>
-    <select name="update-class" id="update-class" required>
-        <option value="">Select a Class</option>
+    <label for="update_class">New Class: </label>
+    <select name="update_class" id="update_class" >
+        <option value="">Keep Current Class</option>
         {{#each classes}}
         <option value="{{this.class_id}}">{{this.class_name}}</option>
         {{/each}}
     </select>
 
-    <label for="update-equipment">New Equipment: </label>
-    <select name="update-equipment" id="update-equipment" required>
-        <option value="">Select Equipment</option>
+    <label for="update_equipment">New Equipment: </label>
+    <select name="update_equipment" id="update_equipment" >
+        <option value="">Keep Current Equipment</option>
         {{#each equipment_records}}
         <option value="{{this.equipment_id}}">{{this.item_name}}</option>
         {{/each}}
