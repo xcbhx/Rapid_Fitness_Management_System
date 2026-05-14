@@ -102,7 +102,7 @@ FROM Enrollments
 JOIN Members ON Enrollments.member_id = Members.member_id
 JOIN Classes ON Enrollments.class_id = Classes.class_id;
 
--- CREATE: enroll a member in a class
+-- INSERT: enroll a member in a class
 INSERT INTO Enrollments (member_id, class_id, signup_date)
 VALUES (:member_id_from_dropdown, :class_id_from_dropdown, :signup_date_input);
 
@@ -111,6 +111,7 @@ UPDATE Enrollments
 SET member_id = :member_id_from_dropdown,
     class_id = :class_id_from_dropdown,
     signup_date = :signup_date_input
+
 WHERE enrollment_id = :enrollment_id_selected_from_table;
 
 -- DELETE: remove a member's enrollment
@@ -126,7 +127,7 @@ FROM Classes_Equipment
 JOIN Classes ON Classes_Equipment.class_id = Classes.class_id
 JOIN Equipment_Records ON Classes_Equipment.equipment_id = Equipment_Records.equipment_id;
 
--- CREATE: assign equipment to a class
+-- INSERT: assign equipment to a class
 INSERT INTO Classes_Equipment (class_id, equipment_id)
 VALUES (:class_id_from_dropdown, :equipment_id_from_dropdown);
 
@@ -138,4 +139,4 @@ WHERE class_equipment_id = :class_equipment_id_selected_from_table;
 
 -- DELETE: remove an equipment assignment from a class
 DELETE FROM Classes_Equipment
-WHERE class_id = :class_id_from_dropdown AND equipment_id = :equipment_id_from_dropdown;
+WHERE class_equipment_id = :class_equipment_id_selected;
