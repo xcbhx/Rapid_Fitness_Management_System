@@ -82,14 +82,27 @@ app.get('/classes', function(req, res) {
 
 // GET Members page
 app.get('/members', function(req, res) {
-    let query1 = "SELECT * FROM Members;";
+    // JOIN with Trainers to get names instead of raw trainer_id
+    let query1 = `SELECT Members.member_id, Members.first_name, Members.last_name,
+                  Members.email, Members.phone_number, Members.membership_start_date,
+                  Trainers.first_name AS trainer_first, Trainers.last_name AS trainer_last
+                  FROM Members
+                  LEFT JOIN Trainers ON Members.trainer_id = Trainers.trainer_id;`;
+
     let query2 = "SELECT * FROM Trainers;";
 
     db.pool.query(query1, function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            return res.sendStatus(400);
+        }
         let members = rows;
         db.pool.query(query2, (error, rows, fields) => {
+            if (error) {
+                console.log(error);
+                return res.sendStatus(400);
+            }
             let trainers = rows;
-            // Ceina - passed members as members instead of data
             res.render('members', { members: members, trainers: trainers });
         });
     });
@@ -98,13 +111,28 @@ app.get('/members', function(req, res) {
 // POST members page
 app.post('/add-member', function(req, res) {
     let data = req.body;
-    let query1 = `INSERT INTO Members (first_name, last_name, email, membership_start_date, trainer_id)
-                  VALUES (?, ?, ?, ?, ?)`;
-    let values = [data.first_name, data.last_name, data.email, data.membership_start_date, data.trainer_id || null];
+
+    // if trainer is NULL
+    let trainer = parseInt(data['input-trainer']);
+    if (isNaN(trainer)) {
+        trainer = null;
+    }
+
+    let query1 = `INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
+                  VALUES (?, ?, ?, ?, ?, ?)`;
+
+    let values = [
+        data['input-fname'],
+        data['input-lname'],
+        data['input-email'],
+        data['input-phone'],
+        data['input-start-date'],
+        trainer
+    ];
 
     db.pool.query(query1, values, function(error, rows, fields) {
         if (error) {
-            console.log(error);
+            console.log("Add Member Error:", error);
             res.sendStatus(400);
         } else {
             res.redirect('/members');
