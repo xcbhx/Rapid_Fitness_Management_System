@@ -43,8 +43,46 @@
 </table>
 
 <hr>
+{{!-- UPDATE member form --}}
+<h3>Update an Existing Member</h3>
+<p>Select a member from the dropdown and enter their new details.</p>
 
-{{!-- 2. The Add Member Form --}}
+<form id="update-member-form" method="POST" action="/update-member">
+    {{!-- Selection dropdown for ID --}}
+    <label for="update-id">Member to Update: </label>
+    <select name="update-id" id="update-id" required>
+        <option value="">Select a Member</option>
+        {{#each members}}
+        <option value="{{this.member_id}}">{{this.member_id}}: {{this.first_name}} {{this.last_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="update-fname">New First Name: </label>
+    <input type="text" name="update-fname" id="update-fname" required>
+
+    <label for="update-lname">New Last Name: </label>
+    <input type="text" name="update-lname" id="update-lname" required>
+
+    <label for="update-email">New Email: </label>
+    <input type="email" name="update-email" id="update-email" required>
+
+    <label for="update-phone">New Phone Number: </label>
+    <input type="tel" name="update-phone" id="update-phone">
+
+    <label for="update-trainer">New Assigned Trainer: </label>
+    <select name="update-trainer" id="update-trainer">
+        <option value="">None (Optional)</option>
+        {{#each trainers}}
+        <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit" value="Update Member">
+</form>
+
+<hr>
+
+{{!-- Add Member Form --}}
 <h3>Add a New Member</h3>
 <form id="add-member-form" method="POST" action="/add-member">
     <label for="first_name">First Name:</label>

@@ -177,9 +177,9 @@ app.post('/delete_trainer', function(req, res) {
 app.get('/classes', function(req, res) {
     // Display all Classes
     let query1 = `
-    SELECT 
-        Classes.class_id, 
-        Classes.class_name, 
+    SELECT
+        Classes.class_id,
+        Classes.class_name,
         Classes.max_capacity,
         Classes.room_location,
         Trainers.first_name,
@@ -187,7 +187,7 @@ app.get('/classes', function(req, res) {
     FROM Classes
     LEFT JOIN Trainers
         ON Classes.trainer_id = Trainers.trainer_id;
-    `;    
+    `;
     // Display all Trainers
     let query2 = 'SELECT * FROM Trainers;';
 
@@ -217,8 +217,8 @@ app.get('/classes', function(req, res) {
     });
 });
 
-// CREATE Class 
-app.post('/add_class', function(req, res) {
+app.post('/add-class', function(req, res) {
+
     let data = req.body;
 
     // Convert empty trainer dropdown to NULL
@@ -425,6 +425,40 @@ app.post('/add-member', function(req, res) {
     });
 });
 
+// POST to UPDATE member
+app.post('/update-member', function(req, res) {
+    let data = req.body;
+
+    // Capture new values from the form
+    let memberID = parseInt(data['update-id']);
+    let fname = data['update-fname'];
+    let lname = data['update-lname'];
+    let email = data['update-email'];
+    let phone = data['update-phone'];
+    let trainer = parseInt(data['update-trainer']);
+
+    // Handle optional trainer
+    if (isNaN(trainer)) {
+        trainer = null;
+    }
+
+    // SQL query to update the record
+    let query = `UPDATE Members
+                 SET first_name = ?, last_name = ?, email = ?, phone_number = ?, trainer_id = ?
+                 WHERE member_id = ?`;
+
+    let values = [fname, lname, email, phone, trainer, memberID];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Update Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/members');
+        }
+    });
+});
+
 // POST route to delete member
 app.post('/delete-member', function(req, res) {
     let data = req.body;
@@ -457,6 +491,21 @@ app.get('/equipment_records', function(req, res) {
     });
 });
 
+// POST to delete equipment_records
+app.post('/delete-equipment', function(req, res) {
+    let equipmentID = parseInt(req.body.equipment_id);
+    let query = `DELETE FROM Equipment_Records WHERE equipment_id = ?`;
+
+    db.pool.query(query, [equipmentID], function(error) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment_records');
+        }
+    });
+});
+
 // POST Route to add new equipment
 app.post('/add-equipment', function(req, res) {
     let data = req.body;
@@ -467,6 +516,31 @@ app.post('/add-equipment', function(req, res) {
     db.pool.query(query1, values, function(error, rows, fields) {
         if (error) {
             console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment_records');
+        }
+    });
+});
+
+// POST to UPDATE Equipment
+app.post('/update-equipment', function(req, res) {
+    let data = req.body;
+
+    let equipmentID = parseInt(data['update-id']);
+    let name = data['update-name'];
+    let status = data['update-status'];
+    let location = data['update-location'];
+
+    let query = `UPDATE Equipment_Records
+                 SET item_name = ?, maintenance_status = ?, location = ?
+                 WHERE equipment_id = ?`;
+
+    let values = [name, status, location, equipmentID];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Update Error:", error);
             res.sendStatus(400);
         } else {
             res.redirect('/equipment_records');
