@@ -140,6 +140,40 @@ app.post('/add-member', function(req, res) {
     });
 });
 
+// POST to UPDATE member
+app.post('/update-member', function(req, res) {
+    let data = req.body;
+
+    // Capture new values from the form
+    let memberID = parseInt(data['update-id']);
+    let fname = data['update-fname'];
+    let lname = data['update-lname'];
+    let email = data['update-email'];
+    let phone = data['update-phone'];
+    let trainer = parseInt(data['update-trainer']);
+
+    // Handle optional trainer
+    if (isNaN(trainer)) {
+        trainer = null;
+    }
+
+    // SQL query to update the record
+    let query = `UPDATE Members
+                 SET first_name = ?, last_name = ?, email = ?, phone_number = ?, trainer_id = ?
+                 WHERE member_id = ?`;
+
+    let values = [fname, lname, email, phone, trainer, memberID];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Update Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/members');
+        }
+    });
+});
+
 // POST route to delete member
 app.post('/delete-member', function(req, res) {
     let data = req.body;
