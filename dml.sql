@@ -25,8 +25,12 @@ DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
 -- MEMBERS PAGE
 -----
 
--- SELECT: get all member detail to display in the browse table
-SELECT * FROM Members;
+-- SELECT: get all member details with their trainers name
+SELECT Members.member_id, Members.first_name, Members.last_name,
+       Members.email, Members.phone_number, Members.membership_start_date,
+       Trainers.first_name AS trainer_first, Trainers.last_name AS trainer_last
+FROM Members
+LEFT JOIN Trainers ON Members.trainer_id = Trainers.trainer_id;
 
 -- INSERT: add a new member using variables from the web form
 INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
@@ -102,6 +106,13 @@ JOIN Classes ON Enrollments.class_id = Classes.class_id;
 INSERT INTO Enrollments (member_id, class_id, signup_date)
 VALUES (:member_id_from_dropdown, :class_id_from_dropdown, :signup_date_input);
 
+-- UPDATE: change a members enrollment to a different class
+UPDATE Enrollments
+SET member_id = :member_id_from_dropdown,
+    class_id = :class_id_from_dropdown,
+    signup_date = :signup_date_input
+WHERE enrollment_id = :enrollment_id_selected_from_table;
+
 -- DELETE: remove a member's enrollment
 DELETE FROM Enrollments WHERE enrollment_id = :enrollment_id_selected;
 
@@ -118,6 +129,12 @@ JOIN Equipment_Records ON Classes_Equipment.equipment_id = Equipment_Records.equ
 -- CREATE: assign equipment to a class
 INSERT INTO Classes_Equipment (class_id, equipment_id)
 VALUES (:class_id_from_dropdown, :equipment_id_from_dropdown);
+
+-- UPDATE: change the equipment assigned to a class
+UPDATE Classes_Equipment
+SET class_id = :class_id_from_dropdown,
+    equipment_id = :equipment_id_from_dropdown
+WHERE class_equipment_id = :class_equipment_id_selected_from_table;
 
 -- DELETE: remove an equipment assignment from a class
 DELETE FROM Classes_Equipment
