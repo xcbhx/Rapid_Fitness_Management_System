@@ -72,47 +72,78 @@ CREATE TABLE Classes_Equipment (
 );
 
 -- Trainers Table
-INSERT INTO Trainers (trainer_id, first_name, last_name, specialization, hourly_rate)
+INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
 VALUES
-(10, 'Michael', 'Scott', 'Yoga', 50.55),
-(11, 'Pam', 'Beesly', 'HIIT', 65.25),
-(12, 'Jim', 'Halpert', 'Strength Training', 65.75);
+('Michael', 'Scott', 'Yoga', 50.55),
+('Pam', 'Beesly', 'HIIT', 65.25),
+('Jim', 'Halpert', 'Strength Training', 65.75);
 
--- Members Table
-INSERT INTO Members (member_id, first_name, last_name, email, phone_number, membership_start_date, trainer_id)
+-- Members Table (trainer_id looked up by name)
+INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
 VALUES
-(172, 'Amy', 'Clark', 'clarka@gmail.com', '503-142-6326', '2026-01-12', 10),
-(123, 'Sara', 'Mathers', 'saramaths@gmail.com', '503-582-5682', '2026-02-10', 11),
-(421, 'John', 'Smith', 'smithj@outlook.com', '971-458-2752', '2026-03-01', 12);
+('Amy', 'Clark', 'clarka@gmail.com', '503-142-6326', '2026-01-12', 
+    (SELECT trainer_id FROM Trainers WHERE first_name = 'Michael' AND last_name = 'Scott')),
+('Sara', 'Mathers', 'saramaths@gmail.com', '503-582-5682', '2026-02-10', 
+    (SELECT trainer_id FROM Trainers WHERE first_name = 'Pam' AND last_name = 'Beesly')),
+('John', 'Smith', 'smithj@outlook.com', '971-458-2752', '2026-03-01', 
+    (SELECT trainer_id FROM Trainers WHERE first_name = 'Jim' AND last_name = 'Halpert'));
 
--- Classes Table
-INSERT INTO Classes (class_id, class_name, max_capacity, trainer_id, room_location)
+-- Classes Table (trainer_id looked up by name)
+INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
 VALUES
-(201, 'Morning Movement', 23, 10, 'Studio A'),
-(302, 'Power Hour', 15, 11, 'Studio B'),
-(403, 'Ironman', 20, 12, 'Weights Room');
+('Morning Movement', 23, 
+    (SELECT trainer_id FROM Trainers WHERE first_name = 'Michael' AND last_name = 'Scott'), 'Studio A'),
+('Power Hour', 15, 
+    (SELECT trainer_id FROM Trainers WHERE first_name = 'Pam' AND last_name = 'Beesly'), 'Studio B'),
+('Ironman', 20, 
+    (SELECT trainer_id FROM Trainers WHERE first_name = 'Jim' AND last_name = 'Halpert'), 'Weights Room');
 
 --  Equipment_Records Table
-INSERT INTO Equipment_Records (equipment_id, item_name, maintenance_status, purchase_date, location)
+INSERT INTO Equipment_Records (item_name, maintenance_status, purchase_date, location)
 VALUES
-(501, 'Yoga Mat', 'Good', '2006-02-14', 'Storage A'),
-(502, '20LB Kettlebell', 'Needs repair', '2025-10-12', 'Weights Room'),
-(503, 'Treadmill', 'In maintenance', '2024-12-05', 'Cardio Zone');
+('Yoga Mat', 'Good', '2006-02-14', 'Storage A'),
+('20LB Kettlebell', 'Needs repair', '2025-10-12', 'Weights Room'),
+('Treadmill', 'In maintenance', '2024-12-05', 'Cardio Zone');
 
--- Enrollments Table (Intersection)
+-- Enrollments Table (Intersection) (member_id and class_id looked up)
 INSERT INTO Enrollments (member_id, class_id, signup_date)
 VALUES
-(172, 201, '2026-01-12'),
-(172, 302, '2026-01-15'), -- Amy in a second class
-(421, 201, '2026-03-01'), -- a second member in 'morning movement'
-(123, 403, '2026-02-10');
+(
+    (SELECT member_id FROM Members WHERE email = 'clarka@gmail.com'),
+    (SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'),
+    '2026-01-12'
+),
+(
+    (SELECT member_id FROM Members WHERE email = 'clarka@gmail.com'),
+    (SELECT class_id FROM Classes WHERE class_name = 'Power Hour'),
+    '2026-01-15'
+),
+(
+    (SELECT member_id FROM Members WHERE email = 'smithj@outlook.com'),
+    (SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'),
+    '2026-03-01'
+),
+(
+    (SELECT member_id FROM Members WHERE email = 'saramaths@gmail.com'),
+    (SELECT class_id FROM Classes WHERE class_name = 'Ironman'),
+    '2026-02-10'
+);
 
--- Classes_Equipment Table (Intersection)
+-- Classes_Equipment Table (Intersection) (class_id and equipment_id looked up)
 INSERT INTO Classes_Equipment (class_id, equipment_id)
 VALUES
-(201, 501),
-(302, 502),
-(403, 503);
+(
+    (SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'),
+    (SELECT equipment_id FROM Equipment_Records WHERE item_name = 'Yoga Mat')
+),
+(
+    (SELECT class_id FROM Classes WHERE class_name = 'Power Hour'),
+    (SELECT equipment_id FROM Equipment_Records WHERE item_name = '20LB Kettlebell')
+),
+(
+    (SELECT class_id FROM Classes WHERE class_name = 'Ironman'),
+    (SELECT equipment_id FROM Equipment_Records WHERE item_name = 'Treadmill')
+);
 
 
 SET FOREIGN_KEY_CHECKS = 1;
