@@ -7,6 +7,7 @@
             <th>ID</th>
             <th>Class Name</th>
             <th>Equipment Item</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -15,6 +16,13 @@
             <td>{{this.class_equipment_id}}</td>
             <td>{{this.class_name}}</td>
             <td>{{this.item_name}}</td>
+            <td>
+                {{!-- Delete form --}}
+                <form method="POST" action="/delete-class-equipment" style="display:inline;">
+                    <input type="hidden" name="class_equipment_id" value="{{this.class_equipment_id}}">
+                    <input type="submit" value="Delete" onclick="return confirm('Remove this equipment assignment?')">
+                </form>
+            </td>
         </tr>
         {{/each}}
     </tbody>
