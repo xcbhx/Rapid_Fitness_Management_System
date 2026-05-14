@@ -29,13 +29,10 @@
 
             <td>
             {{!-- DELETE Class Form--}}
-            <form class="delete_class_form" action="/delete-class" method="POST">
+            <form class="delete_class_form" action="/delete_class" method="POST">
                 <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
                 <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
-                <td>
-                    <button type="submit">
-                        Delete
-                    </button>
+                <button type="submit"> Delete </button>
                 </td>
             </form>
             </td>
@@ -46,7 +43,7 @@
 
 {{!-- CREATE Class Form --}}
 <h2>Add a Class</h2>
-<form id="add_class_form" action="/add-class" method="POST">
+<form id="add_class_form" action="/add_class" method="POST">
     <label for="add_class_title">Class Title: </label>
     <input type="text" name="add_class_title" id="add_class_title" required />
 
@@ -70,7 +67,7 @@
 
 {{!-- UPDATE Class Form --}}
 <h2>Update a Class</h2>
-<form id="update_class_form" action="/update-class" method="POST">
+<form id="update_class_form" action="/update_class" method="POST">
     <label for="update_class_id">Class to Update: </label>
     <select name="update_class_id" id="update_class_id" required>
         <option value="" disabled selected>Select a Class: </option>
@@ -87,19 +84,23 @@
     <input type="text" name="update_class_name" id="update_class_name">
 
     <label for="update_class_max_capacity">Max Capacity: </label>
-    <input type="number" name="update_class_max_capacity" id="update_class_max_capacity" required />
+    <input type="number" name="update_class_max_capacity" id="update_class_max_capacity" />
 
     {{!-- Foreign Key trainer_id --}}
     <label for="update_class_trainer_id">Assign Trainer: </label>
     <select name="update_class_trainer_id" id="update_class_trainer_id">
-        <option value="">None (Optional) </option>
+        {{!-- Keep exisiting trainer --}}
+        <option value="" selected>Keep Current Trainer </option>
+        {{!-- Remove trainer --}}
+        <option value="NULL">Remove Trainer </option>
+        {{!-- Assign a different trainer --}}
         {{#each trainers}}
         <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}} </option>
         {{/each}}
     </select>
 
     <label for="update_class_room_location">Room Location: </label>
-    <input type="text" name="update_class_room_location" id="update_class_room_location" required />
+    <input type="text" name="update_class_room_location" id="update_class_room_location" />
     
-    <button type="submit">Add Class</button>
+    <button type="submit">Update Class</button>
 </form>
