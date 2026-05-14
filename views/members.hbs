@@ -11,6 +11,7 @@
             <th>Phone Number</th>
             <th>Trainer</th>
             <th>Membership Start Date</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +30,13 @@
                 {{/if}}
             </td>
             <td>{{this.membership_start_date}}</td>
+            <td>
+                {{!-- delete form --}}
+                <form method="POST" action="/delete-member" style="display:inline;">
+                    <input type="hidden" name="member_id" value="{{this.member_id}}">
+                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this member?')">
+                </form>
+            </td>
         </tr>
         {{/each}}
     </tbody>
