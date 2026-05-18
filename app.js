@@ -791,6 +791,19 @@ app.post('/delete-class-equipment', function(req, res) {
     });
 });
 
+// POST route to run the database reset procedure
+app.post('/reset-database', function(req, res) {
+    let query = "CALL ResetGymDatabase();";
+    db.pool.query(query, function(error, rows, fields) {
+        if (error) {
+            console.log("Reset Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/');
+        }
+    });
+});
+
 /*
     LISTENER
 */
