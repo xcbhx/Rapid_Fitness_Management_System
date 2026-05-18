@@ -53,8 +53,8 @@ app.post('/add_trainer', function(req, res) {
     let data = req.body;
 
     // Convert empty dropdown value into SQL NULL
-    let specialization = 
-        data.add_trainer_specialization == "" 
+    let specialization =
+        data.add_trainer_specialization == ""
             ? null
             : data.add_trainer_specialization;
 
@@ -113,7 +113,7 @@ let trainerID = data.update_trainer_id;
                 : data.update_trainer_first_name;
 
         let lastName =
-            !data.update_trainer_last_name 
+            !data.update_trainer_last_name
                 ? currentTrainer.last_name
                 : data.update_trainer_last_name;
 
@@ -787,6 +787,19 @@ app.post('/delete_class_equipment', function(req, res) {
         } else {
             // Refresh to see the item gone from the table
             res.redirect('/classes_equipment');
+        }
+    });
+});
+
+// POST route to run the database reset procedure
+app.post('/reset-database', function(req, res) {
+    let query = "CALL ResetGymDatabase();";
+    db.pool.query(query, function(error, rows, fields) {
+        if (error) {
+            console.log("Reset Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/');
         }
     });
 });
