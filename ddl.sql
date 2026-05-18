@@ -85,12 +85,6 @@ BEGIN
     (10, 'Michael', 'Scott', 'Yoga', 50.55),
     (11, 'Pam', 'Beesly', 'HIIT', 65.25),
     (12, 'Jim', 'Halpert', 'Strength Training', 65.75);
--- Trainers Table
-INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
-VALUES
-('Michael', 'Scott', 'Yoga', 50.55),
-('Pam', 'Beesly', 'HIIT', 65.25),
-('Jim', 'Halpert', 'Strength Training', 65.75);
 
     -- Members Table
     INSERT INTO Members (member_id, first_name, last_name, email, phone_number, membership_start_date, trainer_id)
