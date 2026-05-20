@@ -53,6 +53,21 @@ app.get('/trainers', function(req, res) {
     });
 });
 
+// POST to delete trainers
+app.post('/delete-trainer', function(req, res) {
+    let data = req.body;
+    let trainerID = parseInt(data['trainer_id']);
+    let query = `CALL DeleteTrainer(?)`;
+
+    db.pool.query(query, [trainerID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Trainer Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/trainers');
+        }
+    });
+});
 
 // GET Classes page
 app.get('/classes', function(req, res) {
