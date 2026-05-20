@@ -18,12 +18,12 @@ CREATE PROCEDURE sp_CreateTrainers(
 )
 BEGIN
     INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
+
     VALUES (first_name, last_name, specialization, hourly_rate);
 
     -- Display the ID of the last inserted trainer.
     SELECT LAST_INSERT_ID() AS 'new_id';
 
-END //
 DELIMITER ;
 
 -- drop the delete procedure if exists
