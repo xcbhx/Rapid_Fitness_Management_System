@@ -34,8 +34,7 @@
                 {{!-- delete form --}}
                 <form method="POST" action="/delete-member" style="display:inline;">
                     <input type="hidden" name="member_id" value="{{this.member_id}}">
-                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this member?')">
-                </form>
+                    <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Are you sure you want to delete this member?')">                 </form>
             </td>
         </tr>
         {{/each}}
