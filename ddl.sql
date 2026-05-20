@@ -122,14 +122,18 @@ BEGIN
         ((SELECT class_id FROM Classes WHERE class_name = 'Power Hour'), (SELECT equipment_id FROM Equipment_Records WHERE item_name = '20LB Kettlebell')),
         ((SELECT class_id FROM Classes WHERE class_name = 'Ironman'), (SELECT equipment_id FROM Equipment_Records WHERE item_name = 'Treadmill'));
 
-    -- CUD Procedures --
+    SET FOREIGN_KEY_CHECKS = 1;
+END //
+
+-- drop the delete procedure if exists
+DROP PROCEDURE IF EXISTS DeleteMember //
+
+ -- CUD Procedures --
     CREATE PROCEDURE DeleteMember(IN member_id_param INT)
     BEGIN
         DELETE FROM Members WHERE member_id = member_id_param;
-    END;
+    END //
 
-    SET FOREIGN_KEY_CHECKS = 1;
-END //
 DELIMITER ;
 
 -- execute procedure so tables populate
