@@ -19,7 +19,9 @@ SET first_name = :first_name_input,
 WHERE trainer_id = :trainer_id_selected_from_table;
 
 -- DELETE: remove a trainer
-DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
+-- (original query kept for reference)
+--DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
+CALL DeleteTrainer(:trainer_id_selected_from_table);
 
 -----
 -- MEMBERS PAGE
@@ -49,6 +51,7 @@ WHERE member_id = :member_id_selected_from_table;
 -- DELETE: remove a member from the database
 -- (original query kept for reference)
 -- DELETE FROM Members WHERE member_id = :member_id_selected_from_table;
+CALL DeleteMember(:member_id_selected_from_table);
 
 -----
 -- CLASSES PAGE
