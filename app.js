@@ -3,6 +3,19 @@
 // Copied from /OR/ Adapted from /OR/ Based on: Used the starter code
 // Source URL: https://canvas.oregonstate.edu/courses/2042369/assignments/10464646
 
+// Citation for the following function:
+// Date: 05/20/2026
+// Copied from /OR/ Adapted from /OR/ Based on: Used the starter code
+// Source URL: https://canvas.oregonstate.edu/courses/2042369/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26640205
+
+// Citation for use of AI Tools:
+// Date: 05/20/2026
+// Prompts used to generate PL/SQL: 
+// With the provided stored procedure and app.js create route, does the 
+// implementation correctly handle user input, null values, and ensure secure insertion of trainer data?
+// AI Source URL: https://copilot.microsoft.com/
+
+
 /*
     SETUP
 */
@@ -51,6 +64,54 @@ app.get('/trainers', function(req, res) {
             res.render('trainers', { trainers: rows });
         }
     });
+});
+
+// CREATE Trainers Route
+app.post('/trainers/create', async function (req, res) {
+
+    console.log("POST /trainers/create hit");
+    console.log(req.body);
+
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Validate inout before DB call
+        if (!data.create_trainer_first_name?.trim() || 
+            !data.create_trainer_last_name?.trim()) {
+            return res.status(400).send("First and last name are required");
+        }
+
+        if (!data.create_trainer_specialization)
+            data.create_trainer_specialization = null;
+
+        if (isNaN(parseFloat(data.create_trainer_hourly_rate)))
+            return res.status(400).send('Invalid hourly rate');
+
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const [results] = await db.query(
+            `CALL sp_CreateTrainers(?, ?, ?, ?)`,
+            [
+                data.create_trainer_first_name,
+                data.create_trainer_last_name,
+                data.create_trainer_specialization,
+                data.create_trainer_hourly_rate,
+            ]
+        );
+
+        const newId = results[0][0].new_id;
+
+        console.log(`Inserted trainer ID: ${newId}`);
+
+        // Redirect the user to the updated webpage
+        res.redirect('/trainers');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
 });
 
 

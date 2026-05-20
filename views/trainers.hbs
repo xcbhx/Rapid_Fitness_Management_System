@@ -37,15 +37,15 @@
 
 {{!-- CREATE Trainer Form --}}
 <h2>Add a Trainer</h2>
-<form id="add_trainer_form" action="/add_trainer" method="POST">
-    <label for="add_trainer_first_name">First Name: </label>
-    <input type="text" name="add_trainer_first_name" id="add_trainer_first_name" required />
+<form id="create_trainer_form" action="/trainers/create" method="POST">
+    <label for="create_trainer_first_name">First Name: </label>
+    <input type="text" name="create_trainer_first_name" id="create_trainer_first_name" required />
 
-    <label for="add_trainer_last_name">Last Name: </label>
-    <input type="text" name="add_trainer_last_name" id="add_trainer_last_name" required />
+    <label for="create_trainer_last_name">Last Name: </label>
+    <input type="text" name="create_trainer_last_name" id="create_trainer_last_name" required />
 
-    <label for="add_trainer_specialization">Specialization: </label>
-    <select name="add_trainer_specialization" id="add_trainer_specialization" required>
+    <label for="create_trainer_specialization">Specialization: </label>
+    <select name="create_trainer_specialization" id="create_trainer_specialization" required>
         <option value="" disabled selected>Select a Specialization: </option>
         <option value="HIIT">HIIT</option>
         <option value="Spinning">Spinning</option>
@@ -57,8 +57,8 @@
         <option value="Nutrition">Nutrition</option>
     </select>
 
-    <label for="add_trainer_hourly_rate">Hourly Rate: </label>
-    <input type="number" name="add_trainer_hourly_rate" id="add_trainer_hourly_rate" min="0" step="0.01" placeholder="0.00" required />
+    <label for="create_trainer_hourly_rate">Hourly Rate: </label>
+    <input type="number" name="create_trainer_hourly_rate" id="create_trainer_hourly_rate" min="0" step="0.01" placeholder="0.00" required />
 
     <button type="submit">Add Trainer</button>
 </form>
