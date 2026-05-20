@@ -128,31 +128,6 @@ END //
 -- reset delimiter to default
 DELIMITER ;
 
--- drop the delete procedure if exists
-DROP PROCEDURE IF EXISTS DeleteMember //
-DELIMITER //
-
- -- CUD Procedures --
- -- DELETE Member --
-CREATE PROCEDURE DeleteMember(IN member_id_param INT)
-BEGIN
-    DELETE FROM Members WHERE member_id = member_id_param;
-END //
-
-DELIMITER ;
-
--- Procedure to DELETE trainer --
-DROP PROCEDURE IF EXISTS DeleteTrainer //
-
-DELIMITER //
-
-CREATE PROCEDURE DeleteTrainer(IN trainer_id_param INT)
-BEGIN
-    DELETE FROM Trainers WHERE trainer_id = trainer_id_param;
-END //
-
-DELIMITER ;
-
 -- execute procedure so tables populate
 CALL ResetGymDatabase();
 
