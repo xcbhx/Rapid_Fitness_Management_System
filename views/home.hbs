@@ -1,15 +1,27 @@
 <h1 id="page_title">Rapid Fitness Management System</h1>
 <div>
-    <p id="page_desc">Rapid Fitness is a high-traffic gym with 1,200 active members and a staff 
-        of 15 specialized trainers. Currently, the gym manages over 50 unique group 
-        classes per week and tracks an inventory of 200+ pieces of equipment using 
-        disorganized spreadsheets, leading to scheduling conflicts and double-booked 
-        machinery. The gym requires a centralized database-driven website to streamline 
-        operations. The system will solve the current data fragmentation by allowing 
-        staff to record Class Enrollments for members, track Trainer Assignments to 
-        specific sessions, and monitor the maintenance status of Equipment Records. 
-        By transitioning to this website, Rapid Fitness can handle its monthly class 
-        check-in, ensuring that members are never booked into over-capacity classes and 
-        trainers schedules remain optimized.   
+    <p id="page_desc">Rapid Fitness is a high-traffic gym with 1,200 active members and a staff
+        of 15 specialized trainers. Currently, the gym manages over 50 unique group
+        classes per week and tracks an inventory of 200+ pieces of equipment using
+        disorganized spreadsheets, leading to scheduling conflicts and double-booked
+        machinery. The gym requires a centralized database-driven website to streamline
+        operations. The system will solve the current data fragmentation by allowing
+        staff to record Class Enrollments for members, track Trainer Assignments to
+        specific sessions, and monitor the maintenance status of Equipment Records.
+        By transitioning to this website, Rapid Fitness can handle its monthly class
+        check-in, ensuring that members are never booked into over-capacity classes and
+        trainers schedules remain optimized.
     </p>
 </div>
+
+<section class="admin-zone">
+    <h3>Admin Tools</h3>
+    <p><strong>Danger:</strong> This will erase all current data and restore sample data.</p>
+
+    <form action="/reset-database" method="POST">
+        <button type="submit" class="btn-reset"
+            onclick="return confirm('WARNING: This will permanently erase all data. Are you sure?');">
+            Reset Database
+        </button>
+    </form>
+</section>
