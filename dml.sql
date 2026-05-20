@@ -73,7 +73,9 @@ SET class_name = :class_name_input,
 WHERE class_id = :class_id_selected;
 
 -- DELETE: cancel a class
-DELETE FROM Classes WHERE class_id = :class_id_selected;
+-- (original for reference)
+--DELETE FROM Classes WHERE class_id = :class_id_selected;
+CALL DeleteClass(:class_id_selected);
 
 -----
 -- EQUIPMENT PAGE
@@ -95,7 +97,9 @@ SET item_name = :item_name_input,
 WHERE equipment_id = :equipment_id_selected_from_table;
 
 -- DELETE: remove an equipment record
-DELETE FROM Equipment_Records WHERE equipment_id = :equipment_id_selected_from_table;
+-- (original for reference)
+-- DELETE FROM Equipment_Records WHERE equipment_id = :equipment_id_selected_from_table;
+CALL DeleteEquipment(:equipment_id_selected_from_table);
 
 -----
 -- ENROLLMENTS PAGE
@@ -144,5 +148,8 @@ SET class_id = :class_id_from_dropdown,
 WHERE class_equipment_id = :class_equipment_id_selected_from_table;
 
 -- DELETE: remove an equipment assignment from a class
-DELETE FROM Classes_Equipment
-WHERE class_equipment_id = :class_equipment_id_selected;
+-- (original kept for reference)
+-- DELETE FROM Classes_Equipment
+-- WHERE class_equipment_id = :class_equipment_id_selected;
+
+CALL DeleteClassEquipment(:class_equipment_id_selected);

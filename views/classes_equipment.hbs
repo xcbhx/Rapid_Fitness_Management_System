@@ -20,7 +20,7 @@
                 {{!-- Delete form --}}
                 <form method="POST" action="/delete-class-equipment" style="display:inline;">
                     <input type="hidden" name="class_equipment_id" value="{{this.class_equipment_id}}">
-                    <button type="submit" value="Delete" onclick="return confirm('Remove this equipment assignment?')"> Delete </button>
+                    <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Remove this equipment assignment?')">
                 </form>
             </td>
         </tr>
