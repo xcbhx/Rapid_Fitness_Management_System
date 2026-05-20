@@ -175,6 +175,22 @@ app.get('/classes', function(req, res) {
     });
 });
 
+// POST to delete Class
+app.post('/delete-class', function(req, res) {
+    let data = req.body;
+    let classID = parseInt(data['class_id']);
+    let query = `CALL DeleteClass(?)`;
+
+    db.pool.query(query, [classID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Class Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes');
+        }
+    });
+});
+
 // GET Members page
 app.get('/members', function(req, res) {
     // JOIN with Trainers to get names instead of raw trainer_id
@@ -329,6 +345,22 @@ app.post('/add-equipment', function(req, res) {
             res.sendStatus(400);
         } else {
             res.redirect('/equipment_records');
+        }
+    });
+});
+
+// POST to DELETE equipment
+app.post('/delete-equipment', function(req, res) {
+    let data = req.body;
+    let equipID = parseInt(data['equipment_id']);
+    let query = `CALL DeleteEquipment(?)`;
+
+    db.pool.query(query, [equipID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Equipment Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment');
         }
     });
 });
