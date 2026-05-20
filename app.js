@@ -10,8 +10,8 @@
 
 // Citation for use of AI Tools:
 // Date: 05/20/2026
-// Prompts used to generate PL/SQL: 
-// With the provided stored procedure and app.js create route, does the 
+// Prompts used to generate PL/SQL:
+// With the provided stored procedure and app.js create route, does the
 // implementation correctly handle user input, null values, and ensure secure insertion of trainer data?
 // AI Source URL: https://copilot.microsoft.com/
 
@@ -78,7 +78,7 @@ app.post('/trainers/create', async function (req, res) {
         let data = req.body;
 
         // Validate inout before DB call
-        if (!data.create_trainer_first_name?.trim() || 
+        if (!data.create_trainer_first_name?.trim() ||
             !data.create_trainer_last_name?.trim()) {
             return res.status(400).send("First and last name are required");
         }

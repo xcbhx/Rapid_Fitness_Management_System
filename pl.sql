@@ -24,6 +24,7 @@ BEGIN
     -- Display the ID of the last inserted trainer.
     SELECT LAST_INSERT_ID() AS 'new_id';
 
+END //
 DELIMITER ;
 
 -- drop the delete procedure if exists
