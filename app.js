@@ -538,6 +538,22 @@ app.get('/classes_equipment', function (req, res) {
     });
 });
 
+// POST  to delete Class Equipment
+app.post('/delete-class-equipment', function(req, res) {
+    let data = req.body;
+    let ceID = parseInt(data['class_equipment_id']);
+    let query = `CALL DeleteClassEquipment(?)`;
+
+    db.pool.query(query, [ceID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Class Equipment Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes_equipment');
+        }
+    });
+});
+
 // POST route to run the database reset procedure
 app.post('/reset-database', function(req, res) {
     let query = "CALL ResetGymDatabase();";

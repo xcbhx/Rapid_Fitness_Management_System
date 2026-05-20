@@ -71,11 +71,22 @@ BEGIN
 END //
 DELIMITER ;
 
--- Delete Equipment
+-- Delete Equipment_Records
 DROP PROCEDURE IF EXISTS DeleteEquipment;
 DELIMITER //
 CREATE PROCEDURE DeleteEquipment(IN equipment_id_param INT)
 BEGIN
     DELETE FROM Equipment_Records WHERE equipment_id = equipment_id_param;
 END //
+DELIMITER ;
+
+-- DELETE Classes_Equipment assignment
+DROP PROCEDURE IF EXISTS DeleteClassEquipment;
+DELIMITER //
+
+CREATE PROCEDURE DeleteClassEquipment(IN ce_id_param INT)
+BEGIN
+    DELETE FROM Classes_Equipment WHERE class_equipment_id = ce_id_param;
+END //
+
 DELIMITER ;
