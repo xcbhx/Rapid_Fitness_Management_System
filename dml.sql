@@ -119,7 +119,9 @@ SET member_id = :member_id_from_dropdown,
 WHERE enrollment_id = :enrollment_id_selected_from_table;
 
 -- DELETE: remove a member's enrollment
-DELETE FROM Enrollments WHERE enrollment_id = :enrollment_id_selected;
+-- (original query kept for reference)
+--DELETE FROM Enrollments WHERE enrollment_id = :enrollment_id_selected;
+CALL DeleteEnrollment(:enrollment_id_selected);
 
 -----
 -- CLASSES_EQUIPMENT PAGE
