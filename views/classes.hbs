@@ -19,7 +19,7 @@
             <td>{{this.class_id}}</td>
             <td>{{this.class_name}}</td>
             <td>{{this.max_capacity}}</td>
-            <td>{{#if this.first_name}} 
+            <td>{{#if this.first_name}}
                     {{this.first_name}} {{this.last_name}}
                 {{else}}
                     Unassigned
@@ -32,7 +32,7 @@
             <form class="delete_class_form" action="/delete_class" method="POST">
                 <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
                 <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
-                <button type="submit" value="Delete" onclick="return confirm('Remove this Class?')"> Delete </button>
+                <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Remove this class?')">
                 </td>
             </form>
             </td>
@@ -49,7 +49,7 @@
 
     <label for="add_class_max_capacity">Max Capacity: </label>
     <input type="number" name="add_class_max_capacity" id="add_class_max_capacity" required />
-    
+
     {{!-- Foreign Key trainer_id --}}
     <label for="add_class_trainer_id">Assign Trainer: </label>
     <select name="add_class_trainer_id" id="add_class_trainer_id">
@@ -61,7 +61,7 @@
 
     <label for="add_class_room_location">Room Location: </label>
     <input type="text" name="add_class_room_location" id="add_class_room_location" required />
-    
+
     <input type="submit" />
 </form>
 
@@ -79,7 +79,7 @@
         </option>
         {{/each}}
     </select>
-    
+
     <label for="update_class_name">Class Name: </label>
     <input type="text" name="update_class_name" id="update_class_name">
 
@@ -101,6 +101,6 @@
 
     <label for="update_class_room_location">Room Location: </label>
     <input type="text" name="update_class_room_location" id="update_class_room_location" />
-    
+
     <button type="submit">Update Class</button>
 </form>

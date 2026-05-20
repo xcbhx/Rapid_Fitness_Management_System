@@ -90,7 +90,7 @@ app.post('/trainers/create', async function (req, res) {
             return res.status(400).send('Invalid hourly rate');
 
         // Using parameterized queries (Prevents SQL injection attacks)
-        const [results] = await db.query(
+        const [results] = await db.pool.query(
             `CALL sp_CreateTrainers(?, ?, ?, ?)`,
             [
                 data.create_trainer_first_name,
@@ -172,6 +172,22 @@ app.get('/classes', function(req, res) {
                 trainers: trainers
             });
         });
+    });
+});
+
+// POST to delete Class
+app.post('/delete-class', function(req, res) {
+    let data = req.body;
+    let classID = parseInt(data['class_id']);
+    let query = `CALL DeleteClass(?)`;
+
+    db.pool.query(query, [classID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Class Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/classes');
+        }
     });
 });
 
@@ -329,6 +345,22 @@ app.post('/add-equipment', function(req, res) {
             res.sendStatus(400);
         } else {
             res.redirect('/equipment_records');
+        }
+    });
+});
+
+// POST to DELETE equipment
+app.post('/delete-equipment', function(req, res) {
+    let data = req.body;
+    let equipID = parseInt(data['equipment_id']);
+    let query = `CALL DeleteEquipment(?)`;
+
+    db.pool.query(query, [equipID], function(error, rows, fields) {
+        if (error) {
+            console.log("Delete Equipment Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment');
         }
     });
 });

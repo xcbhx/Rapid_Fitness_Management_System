@@ -20,7 +20,7 @@
             <td>
                 <form method="POST" action="/delete-enrollment" style="display:inline;">
                     <input type="hidden" name="enrollment_id" value="{{this.enrollment_id}}">
-                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to unenroll this member?')">
+                    <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Are you sure you want to unenroll this member?')">
                 </form>
             </td>
         </tr>
