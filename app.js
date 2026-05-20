@@ -161,7 +161,7 @@ app.post('/delete_trainer', function(req, res) {
 
     let trainerID = parseInt(req.body.delete_trainer_id);
 
-    let query = `DELETE FROM Trainers WHERE trainer_id = ?`;
+    let query = `CALL DeleteTrainer(?)`; // procedure call to delete
 
     db.pool.query(query, [trainerID], function(error) {
         if (error) {
