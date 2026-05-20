@@ -1,3 +1,8 @@
+// Citation for the following function:
+// Date: 05/07/2026
+// Copied from /OR/ Adapted from /OR/ Based on: Used the starter code
+// Source URL: https://canvas.oregonstate.edu/courses/2042369/assignments/10464646
+
 /*
     SETUP
 */
