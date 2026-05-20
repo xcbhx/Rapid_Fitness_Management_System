@@ -50,3 +50,14 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- Procedure to DELETE enrollment
+DROP PROCEDURE IF EXISTS DeleteEnrollment;
+DELIMITER //
+
+CREATE PROCEDURE DeleteEnrollment(IN enrollment_id_param INT)
+BEGIN
+    DELETE FROM Enrollments WHERE enrollment_id = enrollment_id_param;
+END //
+
+DELIMITER ;

@@ -90,7 +90,7 @@ app.post('/trainers/create', async function (req, res) {
             return res.status(400).send('Invalid hourly rate');
 
         // Using parameterized queries (Prevents SQL injection attacks)
-        const [results] = await db.query(
+        const [results] = await db.pool.query(
             `CALL sp_CreateTrainers(?, ?, ?, ?)`,
             [
                 data.create_trainer_first_name,
