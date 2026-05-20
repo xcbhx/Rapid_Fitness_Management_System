@@ -192,7 +192,7 @@ app.post('/delete-member', function(req, res) {
     let data = req.body;
     let memberID = parseInt(data['member_id']);
 
-    let query1 = `DELETE FROM Members WHERE member_id = ?`;
+    let query1 = `CALL DeleteMember(?)`;
 
     db.pool.query(query1, [memberID], function(error, rows, fields) {
         if (error) {
