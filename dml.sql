@@ -47,7 +47,10 @@ SET first_name = :first_name_input,
 WHERE member_id = :member_id_selected_from_table;
 
 -- DELETE: remove a member from the database
-DELETE FROM Members WHERE member_id = :member_id_selected_from_table;
+CALL DeleteMember(:member_id_from_delete_form);
+
+-- query to reset the database from admin tools
+CALL ResetGymDatabase();
 
 -----
 -- CLASSES PAGE
