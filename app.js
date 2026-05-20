@@ -452,7 +452,7 @@ app.post('/delete-enrollment', function(req, res) {
     let data = req.body;
     let enrollmentID = parseInt(data['enrollment_id']);
 
-    let query = `DELETE FROM Enrollments WHERE enrollment_id = ?`;
+    let query = `CALL DeleteEnrollment(?)`;
 
     db.pool.query(query, [enrollmentID], function(error, rows, fields) {
         if (error) {
