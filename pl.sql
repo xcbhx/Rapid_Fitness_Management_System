@@ -102,6 +102,28 @@ BEGIN
 END //
 DELIMITER ;
 
+-- UPDATE Classes_Equipment
+DROP PROCEDURE IF EXISTS sp_UpdateClassEquipment;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_UpdateClassEquipment(
+    IN class_equipment_id INT,
+    IN class_id INT,
+    IN equipment_id INT
+)
+
+BEGIN
+
+    UPDATE Classes_Equipment
+    SET class_id = COALESCE(ce_class_id, class_id),
+        equipment_id = COALESCE(ce_equipment_id, equipment_id)
+    WHERE class_equipment_id = ce_class_equipment_id;
+
+END //
+
+DELIMITER ;
+
 -- DELETE Classes_Equipment assignment
 DROP PROCEDURE IF EXISTS DeleteClassEquipment;
 DELIMITER //
