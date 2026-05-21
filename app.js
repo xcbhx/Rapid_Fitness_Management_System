@@ -69,10 +69,6 @@ app.get('/trainers', function(req, res) {
 
 // CREATE Trainers Route
 app.post('/trainers/create', async function (req, res) {
-
-    console.log("POST /trainers/create hit");
-    console.log(req.body);
-
     try {
         // Parse frontend form information
         let data = req.body;
@@ -112,6 +108,38 @@ app.post('/trainers/create', async function (req, res) {
         res.status(500).send(
             'An error occurred while executing the database queries.'
         );
+    }
+});
+
+// UPDATE Trainers route
+app.post('/trainers/update', async function(req, res) {
+    try {
+        let data = req.body;
+
+        // Convert invalid hourly rate to NULL
+        if (isNaN(parseFloat(data.update_trainer_hourly_rate))) {
+            data.update_trainer_hourly_rate = null;
+        }
+
+        let query = `
+            CALL sp_UpdateTrainers(?, ?, ?, ?, ?);
+        `;
+
+        let values = [
+            data.update_trainer_id,
+            data.update_trainer_first_name,
+            data.update_trainer_last_name,
+            data.update_trainer_specialization,
+            data.update_trainer_hourly_rate
+        ];
+
+        await db.pool.promise().query(query, values);
+
+        res.redirect('/trainers');
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error updating trainer");
     }
 });
 

@@ -4,9 +4,7 @@
 -- Source URL: https://canvas.oregonstate.edu/courses/2042369/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26640205
 
 
--- #############################
 -- CREATE Trainers
--- #############################
 DROP PROCEDURE IF EXISTS sp_CreateTrainers;
 
 DELIMITER //
@@ -25,6 +23,30 @@ BEGIN
     SELECT LAST_INSERT_ID() AS 'new_id';
 
 END //
+DELIMITER ;
+
+-- UPDATE Trainers
+DROP PROCEDURE IF EXISTS sp_UpdateTrainers;
+
+DELIMITER //
+CREATE PROCEDURE sp_UpdateTrainers(
+    IN trainer_id_input INT
+    IN first_name VARCHAR(50), 
+    IN last_name VARCHAR(50), 
+    IN specialization VARCHAR(100), 
+    IN hourly_rate DECIMAL(19,2)
+)
+
+BEGIN
+    UPDATE Trainers 
+    SET first_name = COALESCE(NULLIF(trainer_first_name, ''), first_name),
+        last_name = COALESCE(NULLIF(trainer_last_name, ''), last_name),
+        specialization = COALESCE(NULLIF(trainer_specialization, ''), specialization),
+        hourly_rate = COALESCE(trainer_hourly_rate, hourly_rate)
+    WHERE trainer_id = trainer_id_input;
+
+END //
+
 DELIMITER ;
 
 -- drop the delete procedure if exists
