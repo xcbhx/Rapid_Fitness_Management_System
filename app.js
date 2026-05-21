@@ -566,6 +566,47 @@ app.get('/classes_equipment', function (req, res) {
     });
 });
 
+// UPDATE Classes_Equipment
+app.post('/classes_equipment/update', async function(req, res) {
+    try {
+
+        let data = req.body;
+
+        // Convert blank dropdowns to NULL
+        if (isNaN(parseInt(data.update_class))) {
+            data.update_class = null;
+        }
+
+        if (isNaN(parseInt(data.update_equipment))) {
+            data.update_equipment = null;
+        }
+
+        let query = `
+            CALL sp_UpdateClassEquipment(?, ?, ?);
+        `;
+
+        let values = [
+            data.update_id,
+            data.update_class,
+            data.update_equipment
+        ];
+
+        await db.pool.promise().query(query, values);
+
+        console.log(
+            `Updated assignment ID: ${data.update_id}`
+        );
+
+        res.redirect('/classes_equipment');
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(
+            'Error updating class equipment assignment'
+        );
+    }
+});
+
 // POST  to delete Class Equipment
 app.post('/delete-class-equipment', function(req, res) {
     let data = req.body;
