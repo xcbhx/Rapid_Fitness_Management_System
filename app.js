@@ -378,22 +378,6 @@ app.post('/add-equipment', function(req, res) {
     });
 });
 
-// POST to DELETE equipment
-app.post('/delete-equipment', function(req, res) {
-    let data = req.body;
-    let equipID = parseInt(data['equipment_id']);
-    let query = `CALL DeleteEquipment(?)`;
-
-    db.pool.query(query, [equipID], function(error, rows, fields) {
-        if (error) {
-            console.log("Delete Equipment Error:", error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/equipment');
-        }
-    });
-});
-
 // POST to UPDATE Equipment
 app.post('/update-equipment', function(req, res) {
     let data = req.body;
