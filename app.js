@@ -347,12 +347,13 @@ app.get('/equipment_records', function(req, res) {
 
 // POST to delete equipment_records
 app.post('/delete-equipment', function(req, res) {
-    let equipmentID = parseInt(req.body.equipment_id);
-    let query = `DELETE FROM Equipment_Records WHERE equipment_id = ?`;
+    let data = req.body;
+    let equipID = parseInt(data['equipment_id']);
+    let query = `CALL DeleteEquipment(?)`;
 
-    db.pool.query(query, [equipmentID], function(error) {
+    db.pool.query(query, [equipID], function(error, rows, fields) {
         if (error) {
-            console.log(error);
+            console.log("Delete Equipment Error:", error);
             res.sendStatus(400);
         } else {
             res.redirect('/equipment_records');
