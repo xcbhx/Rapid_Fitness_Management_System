@@ -30,15 +30,15 @@ DROP PROCEDURE IF EXISTS sp_UpdateTrainers;
 
 DELIMITER //
 CREATE PROCEDURE sp_UpdateTrainers(
-    IN trainer_id_input INT
-    IN first_name VARCHAR(50), 
-    IN last_name VARCHAR(50), 
-    IN specialization VARCHAR(100), 
+    IN trainer_id_input INT,
+    IN first_name VARCHAR(50),
+    IN last_name VARCHAR(50),
+    IN specialization VARCHAR(100),
     IN hourly_rate DECIMAL(19,2)
 )
 
 BEGIN
-    UPDATE Trainers 
+    UPDATE Trainers
     SET first_name = COALESCE(NULLIF(trainer_first_name, ''), first_name),
         last_name = COALESCE(NULLIF(trainer_last_name, ''), last_name),
         specialization = COALESCE(NULLIF(trainer_specialization, ''), specialization),
