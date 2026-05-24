@@ -62,7 +62,7 @@ END //
 DELIMITER ;
 
 -- Procedure to DELETE trainer --
-DROP PROCEDURE IF EXISTS DeleteTrainer //
+DROP PROCEDURE IF EXISTS DeleteTrainer;
 
 DELIMITER //
 

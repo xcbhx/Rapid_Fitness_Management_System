@@ -29,9 +29,9 @@
 
             <td>
             {{!-- DELETE Class Form--}}
-            <form class="delete_class_form" action="/delete_class" method="POST">
-                <input type="hidden" name="delete_class_id" value="{{this.class_id}}" />
-                <input type="hidden" name="delete_class_name" value="{{this.class_name}}" />
+            <form class="delete_class_form" action="/delete-class" method="POST">
+                <input type="hidden" name="class_id" value="{{this.class_id}}" />
+                <input type="hidden" name="class_name" value="{{this.class_name}}" />
                 <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Remove this class?')">
                 </td>
             </form>
