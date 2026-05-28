@@ -89,21 +89,21 @@ BEGIN
     -- Members Table (trainer_id looked up by name)
     INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
     VALUES
-    ('Amy', 'Clark', 'clarka@gmail.com', '503-142-6326', '2026-01-12', 
+    ('Amy', 'Clark', 'clarka@gmail.com', '503-142-6326', '2026-01-12',
         (SELECT trainer_id FROM Trainers WHERE first_name = 'Michael' AND last_name = 'Scott')),
-    ('Sara', 'Mathers', 'saramaths@gmail.com', '503-582-5682', '2026-02-10', 
+    ('Sara', 'Mathers', 'saramaths@gmail.com', '503-582-5682', '2026-02-10',
         (SELECT trainer_id FROM Trainers WHERE first_name = 'Pam' AND last_name = 'Beesly')),
-    ('John', 'Smith', 'smithj@outlook.com', '971-458-2752', '2026-03-01', 
+    ('John', 'Smith', 'smithj@outlook.com', '971-458-2752', '2026-03-01',
         (SELECT trainer_id FROM Trainers WHERE first_name = 'Jim' AND last_name = 'Halpert'));
 
     -- Classes Table (trainer_id looked up by name)
     INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
     VALUES
-    ('Morning Movement', 23, 
+    ('Morning Movement', 23,
         (SELECT trainer_id FROM Trainers WHERE first_name = 'Michael' AND last_name = 'Scott'), 'Studio A'),
-    ('Power Hour', 15, 
+    ('Power Hour', 15,
         (SELECT trainer_id FROM Trainers WHERE first_name = 'Pam' AND last_name = 'Beesly'), 'Studio B'),
-    ('Ironman', 20, 
+    ('Ironman', 20,
         (SELECT trainer_id FROM Trainers WHERE first_name = 'Jim' AND last_name = 'Halpert'), 'Weights Room');
 
     --  Equipment_Records Table
@@ -116,33 +116,28 @@ BEGIN
     -- Enrollments Table (Intersection)
     INSERT INTO Enrollments (member_id, class_id, signup_date)
         VALUES
-        ((SELECT member_id FROM Members WHERE email = 'clarka@gmail.com'), 
+        ((SELECT member_id FROM Members WHERE email = 'clarka@gmail.com'),
             (SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'), '2026-01-12'),
-        ((SELECT member_id FROM Members WHERE email = 'clarka@gmail.com'), 
+        ((SELECT member_id FROM Members WHERE email = 'clarka@gmail.com'),
             (SELECT class_id FROM Classes WHERE class_name = 'Power Hour'), '2026-01-15'),
-        ((SELECT member_id FROM Members WHERE email = 'smithj@outlook.com'), 
+        ((SELECT member_id FROM Members WHERE email = 'smithj@outlook.com'),
             (SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'), '2026-03-01'),
-        ((SELECT member_id FROM Members WHERE email = 'saramaths@gmail.com'), 
+        ((SELECT member_id FROM Members WHERE email = 'saramaths@gmail.com'),
             (SELECT class_id FROM Classes WHERE class_name = 'Ironman'), '2026-02-10');
 
     -- Classes_Equipment Table (Intersection)
     INSERT INTO Classes_Equipment (class_id, equipment_id)
         VALUES
-        ((SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'), 
+        ((SELECT class_id FROM Classes WHERE class_name = 'Morning Movement'),
             (SELECT equipment_id FROM Equipment_Records WHERE item_name = 'Yoga Mat')),
-        ((SELECT class_id FROM Classes WHERE class_name = 'Power Hour'), 
+        ((SELECT class_id FROM Classes WHERE class_name = 'Power Hour'),
             (SELECT equipment_id FROM Equipment_Records WHERE item_name = '20LB Kettlebell')),
-        ((SELECT class_id FROM Classes WHERE class_name = 'Ironman'), 
+        ((SELECT class_id FROM Classes WHERE class_name = 'Ironman'),
             (SELECT equipment_id FROM Equipment_Records WHERE item_name = 'Treadmill'));
 
+    COMMIT;
     SET FOREIGN_KEY_CHECKS = 1;
 END //
 
 -- reset delimiter to default
 DELIMITER ;
-
--- execute procedure so tables populate
-CALL ResetGymDatabase();
-
-SET FOREIGN_KEY_CHECKS = 1;
-COMMIT;
