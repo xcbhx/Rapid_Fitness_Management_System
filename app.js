@@ -204,6 +204,50 @@ app.get('/classes', function(req, res) {
     });
 });
 
+// POST route to Add Class
+app.post('/add_class', function(req, res) {
+    let data = req.body;
+    let query = "CALL sp_CreateClass(?, ?, ?, ?)";
+    let values = [
+        data['input_class_name'],
+        data['input_max_capacity'],
+        data['input_trainer_id'],
+        data['input_room_location']
+    ];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        }else {
+            res.redirect('/classes');
+        }
+    });
+});
+
+// POST route to Update Class
+app.post('/update_class', function(req, res) {
+    let data = req.body;
+
+    let query = "CALL sp_UpdateClass(?, ?, ?, ?, ?)";
+    let values = [
+        data['update_class_id'],
+        data['update_class_name'],
+        data['update_class_max_capacity'],
+        data['update_class_trainer_id'],
+        data['update_room_location']
+    ];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log(error);
+            res.sendStatus(400);
+        }else {
+            res.redirect('/classes');
+        }
+    });
+});
+
 // POST to delete Class
 app.post('/delete-class', function(req, res) {
     let data = req.body;
@@ -610,9 +654,6 @@ app.post('/reset-database', function(req, res) {
 });
 
 // Dummy placeholder routes to prevent crashes during grading
-app.post(['/add_class', '/update_class'], function(req, res) {
-    res.redirect('/classes');
-});
 
 app.post('/add_class_equipment', function(req, res) {
     res.redirect('/classes_equipment');

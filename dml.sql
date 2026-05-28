@@ -35,18 +35,21 @@ FROM Members
 LEFT JOIN Trainers ON Members.trainer_id = Trainers.trainer_id;
 
 -- INSERT: add a new member using variables from the web form
-INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
-VALUES (:first_name_input, :last_name_input, :email_input, :phone_input, :start_date_input, :trainer_id_from_dropdown);
+--INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
+--VALUES (:first_name_input, :last_name_input, :email_input, :phone_input, :start_date_input, :trainer_id_from_dropdown);
+CALL sp_CreateMember(:first_name_input, :last_name_input, :email_input, :phone_input, :start_date_input, :trainer_id_input);
 
 -- UPDATE: modify a member's information based on the ID selected from the table
-UPDATE Members
-SET first_name = :first_name_input,
-    last_name = :last_name_input,
-    email = :email_input,
-    phone_number = :phone_input,
-    membership_start_date = :start_date_input,
-    trainer_id = :trainer_id_from_dropdown
-WHERE member_id = :member_id_selected_from_table;
+--UPDATE Members
+--SET first_name = :first_name_input,
+--    last_name = :last_name_input,
+--    email = :email_input,
+--    phone_number = :phone_input,
+--    membership_start_date = :start_date_input,
+--    trainer_id = :trainer_id_from_dropdown
+--WHERE member_id = :member_id_selected_from_table;
+
+CALL sp_UpdateMember(:member_id_selected, :fname_input, :lname_input, :email_input, :phone_input, :trainer_id_input);
 
 -- DELETE: remove a member from the database
 -- (original query kept for reference)
@@ -61,16 +64,18 @@ CALL DeleteMember(:member_id_selected_from_table);
 SELECT * FROM Classes;
 
 -- INSERT: add a new fitness class
-INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
-VALUES (:class_name_input, :max_capacity_input, :trainer_id_from_dropdown, :room_location_input);
+--INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
+--VALUES (:class_name_input, :max_capacity_input, :trainer_id_from_dropdown, :room_location_input);
+CALL sp_CreateClass(:class_name_input, :max_capacity_input, :trainer_id_input, :room_location_input);
 
 -- UPDATE: edit class details
-UPDATE Classes
+--UPDATE Classes
 SET class_name = :class_name_input,
-    max_capacity = :max_capacity_input,
-    trainer_id = :trainer_id_from_dropdown,
-    room_location = :room_location_input
-WHERE class_id = :class_id_selected;
+--  max_capacity = :max_capacity_input,
+--trainer_id = :trainer_id_from_dropdown,
+--  room_location = :room_location_input
+--WHERE class_id = :class_id_selected;
+CALL sp_UpdateClass(:class_id_selected, :class_name_input, :max_capacity_input, :trainer_id_input, :room_location_input);
 
 -- DELETE: cancel a class
 -- (original for reference)
