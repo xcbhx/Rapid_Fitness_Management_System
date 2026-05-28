@@ -21,6 +21,7 @@
 */
 
 // Express
+require('dotenv').config();
 const express = require('express');  // We are using the express library for the web server
 const app = express();               // We need to instantiate an express object to interact with the server in our code
 app.use(express.json());
@@ -249,34 +250,16 @@ app.get('/members', function(req, res) {
 
 // POST members page
 app.post('/add-member', function(req, res) {
-    let data = req.body;
+    try {
+        let data = req.body;
+        let query = "CALL sp_CreateMember(?, ?, ?, ?, ?, ?)";
+        let values = [data['input-fname'], data['input-lname'], data['input-email'], data['input-phone'], data['input-start-date'], data['input-trainer']];
 
-    // if trainer is NULL
-    let trainer = parseInt(data['input-trainer']);
-    if (isNaN(trainer)) {
-        trainer = null;
-    }
-
-    let query1 = `INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
-                  VALUES (?, ?, ?, ?, ?, ?)`;
-
-    let values = [
-        data['input-fname'],
-        data['input-lname'],
-        data['input-email'],
-        data['input-phone'],
-        data['input-start-date'],
-        trainer
-    ];
-
-    db.pool.query(query1, values, function(error, rows, fields) {
-        if (error) {
-            console.log("Add Member Error:", error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/members');
-        }
-    });
+        db.pool.query(query, values, function(error, rows, fields) {
+            if (error) { console.log(error); res.sendStatus(400); }
+            else { res.redirect('/members'); }
+        });
+    } catch (err) { res.sendStatus(500); }
 });
 
 // POST to UPDATE member
@@ -610,15 +593,20 @@ app.post('/delete-class-equipment', function(req, res) {
 
 // POST route to run the database reset procedure
 app.post('/reset-database', function(req, res) {
-    let query = "CALL ResetGymDatabase();";
-    db.pool.query(query, function(error, rows, fields) {
-        if (error) {
-            console.log("Reset Error:", error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/');
-        }
-    });
+    try {
+        let query = "CALL ResetGymDatabase();";
+        db.pool.query(query, function(error, rows, fields) {
+            if (error) {
+                console.error(error);
+                res.status(500).send("Database Error");
+            } else {
+                res.redirect('/');
+            }
+        });
+    } catch (jsError) {
+        console.error(jsError);
+        res.status(500).send("Server Error");
+    }
 });
 
 // Dummy placeholder routes to prevent crashes during grading

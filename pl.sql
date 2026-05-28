@@ -48,6 +48,46 @@ BEGIN
 END //
 
 DELIMITER ;
+-- CREATE Member
+DROP PROCEDURE IF EXISTS sp_CreateMember;
+DELIMITER //
+
+CREATE PROCEDURE sp_CreateMember(
+    IN p_fname VARCHAR(50),
+    IN p_lname VARCHAR(50),
+    IN p_email VARCHAR(100),
+    IN p_phone VARCHAR(15),
+    IN p_start_date DATE,
+    IN p_trainer_id INT
+)
+BEGIN
+    INSERT INTO Members (first_name, last_name, email, phone_number, membership_start_date, trainer_id)
+    VALUES (p_fname, p_lname, p_email, p_phone, p_start_date, NULLIF(p_trainer_id, 0));
+END //
+DELIMITER ;
+
+-- UPDATE Member
+DROP PROCEDURE IF EXISTS sp_UpdateMember;
+DELIMITER //
+
+CREATE PROCEDURE sp_UpdateMember(
+    IN p_member_id INT,
+    IN p_fname VARCHAR(50),
+    IN p_lname VARCHAR(50),
+    IN p_email VARCHAR(100),
+    IN p_phone VARCHAR(15),
+    IN p_trainer_id INT
+)
+BEGIN
+    UPDATE Members
+    SET first_name = COALESCE(NULLIF(p_fname, ''), first_name),
+        last_name = COALESCE(NULLIF(p_lname, ''), last_name),
+        email = COALESCE(NULLIF(p_email, ''), email),
+        phone_number = COALESCE(NULLIF(p_phone, ''), phone_number),
+        trainer_id = CASE WHEN p_trainer_id = -1 THEN NULL ELSE COALESCE(p_trainer_id, trainer_id) END
+    WHERE member_id = p_member_id;
+END //
+DELIMITER ;
 
 -- drop the delete procedure if exists
 DROP PROCEDURE IF EXISTS DeleteMember;
