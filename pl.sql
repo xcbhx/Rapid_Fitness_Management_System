@@ -123,6 +123,40 @@ BEGIN
 END //
 
 DELIMITER ;
+-- CREATE Class
+DROP PROCEDURE IF EXISTS sp_CreateClass;
+DELIMITER //
+CREATE PROCEDURE sp_CreateClass(
+    IN p_name VARCHAR(100),
+    IN p_max_capacity INT,
+    IN p_trainer_id INT,
+    IN p_room VARCHAR(50)
+)
+BEGIN
+    INSERT INTO Classes (class_name, max_capacity, trainer_id, room_location)
+    VALUES (p_name, p_max_capacity, NULLIF(p_trainer_id, 0), p_room);
+END //
+DELIMITER ;
+
+-- UPDATE Class
+DROP PROCEDURE IF EXISTS sp_UpdateClass;
+DELIMITER //
+CREATE PROCEDURE sp_UpdateClass(
+    IN p_class_id INT,
+    IN p_name VARCHAR(100),
+    IN p_max_capacity INT,
+    IN p_trainer_id INT,
+    IN p_room VARCHAR(50)
+)
+BEGIN
+    UPDATE Classes
+    SET class_name = COALESCE(NULLIF(p_name, ''), class_name),
+        max_capacity = COALESCE(p_max_capacity, max_capacity),
+        trainer_id = CASE WHEN p_trainer_id = -1 THEN NULL ELSE COALESCE(p_trainer_id, trainer_id) END,
+        room_location = COALESCE(NULLIF(p_room, ''), room_location)
+    WHERE class_id = p_class_id;
+END //
+DELIMITER ;
 
 -- Delete Class
 DROP PROCEDURE IF EXISTS DeleteClass;
