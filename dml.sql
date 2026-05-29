@@ -116,16 +116,18 @@ JOIN Members ON Enrollments.member_id = Members.member_id
 JOIN Classes ON Enrollments.class_id = Classes.class_id;
 
 -- INSERT: enroll a member in a class
-INSERT INTO Enrollments (member_id, class_id, signup_date)
-VALUES (:member_id_from_dropdown, :class_id_from_dropdown, :signup_date_input);
+-- INSERT INTO Enrollments (member_id, class_id, signup_date)
+-- VALUES (:member_id_from_dropdown, :class_id_from_dropdown, :signup_date_input);
+CALL sp_CreateEnrollment(:member_id_from_dropdown, :class_id_from_dropdown);
 
 -- UPDATE: change a members enrollment to a different class
-UPDATE Enrollments
-SET member_id = :member_id_from_dropdown,
-    class_id = :class_id_from_dropdown,
-    signup_date = :signup_date_input
+-- UPDATE Enrollments
+-- SET member_id = :member_id_from_dropdown,
+--    class_id = :class_id_from_dropdown,
+--    signup_date = :signup_date_input
 
-WHERE enrollment_id = :enrollment_id_selected_from_table;
+CALL sp_UpdateEnrollment(:enrollment_id_selected, :member_id_from_dropdown, :class_id_from_dropdown);
+--WHERE enrollment_id = :enrollment_id_selected_from_table;
 
 -- DELETE: remove a member's enrollment
 -- (original query kept for reference)
