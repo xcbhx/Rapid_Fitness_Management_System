@@ -46,3 +46,132 @@ nav {
 .btn-reset:hover {
     background-color: #c9302c;
 }
+
+/* Global layout */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h2, h3 {
+    color: #2c3e50;
+    margin-top: 20px;
+}
+
+nav a {
+    color: #34495e;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #ecf0f1;
+    color: #2980b9;
+}
+
+/* Tables view */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 40px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+table th {
+    background-color: #34495e;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+table tbody tr:hover {
+    background-color: #f1f2f6;
+}
+
+/* CUD Operations */
+form {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    max-width: 600px;
+    margin: 20px 0 40px 0;
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* action button */
+form input[type="submit"] {
+    background-color: #ae5050;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+form input[type="submit"]:hover {
+    background-color: #96213e;
+}
+
+/* table cells */
+table td form { /* strip global layout when nested in table rows */
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    max-width: none;
+    display: inline;
+}
+
+table td .btn-reset {
+    background-color: #ae5050;
+    color: white;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+    width: auto;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+table td .btn-reset:hover {
+    background-color: #96213e;
+}
