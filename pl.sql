@@ -113,6 +113,35 @@ END //
 
 DELIMITER ;
 
+-- CREATE Enrollment
+DROP PROCEDURE IF EXISTS sp_CreateEnrollment;
+DELIMITER //
+CREATE PROCEDURE sp_CreateEnrollment(
+    IN p_member_id INT,
+    IN p_class_id INT
+)
+BEGIN
+    INSERT INTO Enrollments (member_id, class_id, signup_date)
+    VALUES (p_member_id, p_class_id, CURRENT_DATE());
+END //
+DELIMITER ;
+
+-- UPDATE Enrollment
+DROP PROCEDURE IF EXISTS sp_UpdateEnrollment;
+DELIMITER //
+CREATE PROCEDURE sp_UpdateEnrollment(
+    IN p_enrollment_id INT,
+    IN p_member_id INT,
+    IN p_class_id INT
+)
+BEGIN
+    UPDATE Enrollments
+    SET member_id = COALESCE(p_member_id, member_id),
+        class_id = COALESCE(p_class_id, class_id)
+    WHERE enrollment_id = p_enrollment_id;
+END //
+DELIMITER ;
+
 -- Procedure to DELETE enrollment
 DROP PROCEDURE IF EXISTS DeleteEnrollment;
 DELIMITER //

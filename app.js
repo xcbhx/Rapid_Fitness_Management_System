@@ -310,29 +310,20 @@ app.post('/add-member', function(req, res) {
 app.post('/update-member', function(req, res) {
     let data = req.body;
 
-    // Capture new values from the form
-    let memberID = parseInt(data['update-id']);
-    let fname = data['update-fname'];
-    let lname = data['update-lname'];
-    let email = data['update-email'];
-    let phone = data['update-phone'];
-    let trainer = parseInt(data['update-trainer']);
+    let query = `CALL sp_UpdateMember(?, ?, ?, ?, ?, ?)`;
 
-    // Handle optional trainer
-    if (isNaN(trainer)) {
-        trainer = null;
-    }
-
-    // SQL query to update the record
-    let query = `UPDATE Members
-                 SET first_name = ?, last_name = ?, email = ?, phone_number = ?, trainer_id = ?
-                 WHERE member_id = ?`;
-
-    let values = [fname, lname, email, phone, trainer, memberID];
+    let values = [
+        data['update-id'],    // p_member_id
+        data['update-fname'], // p_fname
+        data['update-lname'], // p_lname
+        data['update-email'], // p_email
+        data['update-phone'], // p_phone
+        data['update-trainer'] // p_trainer (will pass -1 if 'None' is picked)
+    ];
 
     db.pool.query(query, values, function(error, rows, fields) {
         if (error) {
-            console.log("Update Error:", error);
+            console.log("Update Member Error:", error);
             res.sendStatus(400);
         } else {
             res.redirect('/members');
@@ -470,50 +461,42 @@ app.get('/enrollments', function(req, res) {
     });
 });
 
-// POST route Enrollments page
-app.post('/add-class-enrollment', function(req, res)
-{
-    // capture data from the form
+// POST add enrollment
+app.post('/add-enrollment', function(req, res) {
     let data = req.body;
 
-    // prepare the query
-    let query1 = `INSERT INTO Enrollments (member_id, class_id, signup_date)
-                  VALUES (?, ?, CURRENT_DATE())`;
+    let query = `CALL sp_CreateEnrollment(?, ?)`;
+    let values = [
+        parseInt(data['input-member']),
+        parseInt(data['input-class']),
+    ];
 
-    let inserts = [data['input-member'], data['input-class']];
-
-    // run the query
-    db.pool.query(query1, inserts, function(error, rows, fields){
-        if (error){
-            console.log(error);
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Add Enrollment Error:", error);
             res.sendStatus(400);
-        } else{
-            // send user back to enrollments page to see new record
+        } else {
             res.redirect('/enrollments');
         }
     });
 });
 
-// POST route to UPDATE Enrollments
-app.post('/update-enrollment', function(req, res){
+// POST UPDATE Enrollment
+app.post('/update-enrollment', function(req, res) {
     let data = req.body;
 
-    let enrollment_id = parseInt(data['update-id']);
-    let member_id = parseInt(data['update-member']);
-    let class_id = parseInt(data['update-class']);
-
-    // query to update the row where the enrollment id matches the one selected
-    let query = `UPDATE Enrollments
-                 SET member_id = ?, class_id = ?
-                 WHERE enrollment_id = ?`;
-    let values = [member_id, class_id, enrollment_id];
+    let query = `CALL sp_UpdateEnrollment(?, ?, ?)`;
+    let values = [
+        parseInt(data['update-id']),
+        data['update-member'] ? parseInt(data['update-member']) : null,
+        data['update-class'] ? parseInt(data['update-class']) : null
+    ];
 
     db.pool.query(query, values, function(error, rows, fields) {
-        if (error){
-            console.log("Update error:", error);
+        if (error) {
+            console.log("Update Enrollment Error:", error);
             res.sendStatus(400);
-        } else{
-            // redirect back to see updated table row
+        } else {
             res.redirect('/enrollments');
         }
     });
