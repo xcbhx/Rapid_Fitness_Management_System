@@ -3,6 +3,13 @@
 -- Copied from /OR/ Adapted from /OR/ Based on: Used the starter code
 -- Source URL: https://canvas.oregonstate.edu/courses/2042369/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=26640205
 
+-- Citation for use of AI tools:
+-- Date: 06/01/2026
+-- Prompts used to help with parameter collisions and empty input string handling
+-- why does leaving a web form input blank end up wiping out or clearing existing table data during an update
+-- and how can we design a stored procedure that can isolate and update data
+-- AI Source URL: https://copilot.microsoft.com/
+
 
 -- CREATE Trainers
 DROP PROCEDURE IF EXISTS sp_CreateTrainers;
@@ -193,6 +200,54 @@ DELIMITER //
 CREATE PROCEDURE DeleteClass(IN class_id_param INT)
 BEGIN
     DELETE FROM Classes WHERE class_id = class_id_param;
+END //
+DELIMITER ;
+
+-- CREATE Equipment Record
+DROP PROCEDURE IF EXISTS sp_CreateEquipment;
+DELIMITER //
+CREATE PROCEDURE sp_CreateEquipment(
+    IN p_item_name VARCHAR(100),
+    IN p_maintenance_status VARCHAR(50),
+    IN p_purchase_date DATE,
+    IN p_location VARCHAR(50)
+)
+BEGIN
+    INSERT INTO Equipment_Records (item_name, maintenance_status, purchase_date, location)
+    VALUES (p_item_name, p_maintenance_status, p_purchase_date, p_location);
+END //
+DELIMITER ;
+
+-- UPDATE Equipment Record
+DROP PROCEDURE IF EXISTS sp_UpdateEquipment;
+DELIMITER //
+CREATE PROCEDURE sp_UpdateEquipment(
+    IN input_equipment_id INT,
+    IN input_item_name VARCHAR(100),
+    IN input_maintenance_status VARCHAR(50),
+    IN input_location VARCHAR(50)
+)
+BEGIN
+    UPDATE Equipment_Records
+    SET
+        -- If user typed nothing or left it blank, keep the old item_name
+        item_name = CASE
+            WHEN input_item_name IS NULL OR input_item_name = '' THEN item_name
+            ELSE input_item_name
+        END,
+
+        -- If the dropdown wasn't selected, keep the old status
+        maintenance_status = CASE
+            WHEN input_maintenance_status IS NULL OR input_maintenance_status = '' THEN maintenance_status
+            ELSE input_maintenance_status
+        END,
+
+        -- If user left the location textbox blank, keep the old location
+        location = CASE
+            WHEN input_location IS NULL OR input_location = '' THEN location
+            ELSE input_location
+        END
+    WHERE equipment_id = input_equipment_id;
 END //
 DELIMITER ;
 
