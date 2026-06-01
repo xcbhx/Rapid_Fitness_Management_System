@@ -236,7 +236,7 @@ BEGIN
             ELSE input_item_name
         END,
 
-        -- If the dropdown wasn't selected, keep the old status
+        -- If the dropdown wasnt selected, keep the old status
         maintenance_status = CASE
             WHEN input_maintenance_status IS NULL OR input_maintenance_status = '' THEN maintenance_status
             ELSE input_maintenance_status

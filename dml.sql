@@ -1,8 +1,8 @@
 -- Group 2: Ceina Ellison, Eman Alturky
 
-------
+
 -- TRAINERS PAGE
-------
+
 -- SELECT: get all trainers to display in the browse table
 SELECT * FROM Trainers;
 
@@ -23,9 +23,9 @@ WHERE trainer_id = :trainer_id_selected_from_table;
 --DELETE FROM Trainers WHERE trainer_id = :trainer_id_selected_from_table;
 CALL DeleteTrainer(:trainer_id_selected_from_table);
 
------
+
 -- MEMBERS PAGE
------
+
 
 -- SELECT: get all member details with their trainers name
 SELECT Members.member_id, Members.first_name, Members.last_name,
@@ -56,9 +56,9 @@ CALL sp_UpdateMember(:member_id_selected, :fname_input, :lname_input, :email_inp
 -- DELETE FROM Members WHERE member_id = :member_id_selected_from_table;
 CALL DeleteMember(:member_id_selected_from_table);
 
------
+
 -- CLASSES PAGE
------
+
 
 -- SELECT: get all classes to browse
 SELECT * FROM Classes;
@@ -82,9 +82,9 @@ CALL sp_UpdateClass(:class_id_selected, :class_name_input, :max_capacity_input, 
 --DELETE FROM Classes WHERE class_id = :class_id_selected;
 CALL DeleteClass(:class_id_selected);
 
------
+
 -- EQUIPMENT PAGE
------
+
 
 -- SELECT: get all equipment records for the browse table
 SELECT * FROM Equipment_Records;
@@ -108,9 +108,9 @@ CALL sp_UpdateEquipment(:equipment_id_selected, :item_name_input, :maintenance_s
 -- DELETE FROM Equipment_Records WHERE equipment_id = :equipment_id_selected_from_table;
 CALL DeleteEquipment(:equipment_id_selected_from_table);
 
------
+
 -- ENROLLMENTS PAGE
------
+
 -- SELECT: view which members are in which classes
 SELECT Enrollments.enrollment_id, Members.first_name, Members.last_name, Classes.class_name, Enrollments.signup_date
 FROM Enrollments
@@ -136,9 +136,7 @@ CALL sp_UpdateEnrollment(:enrollment_id_selected, :member_id_from_dropdown, :cla
 --DELETE FROM Enrollments WHERE enrollment_id = :enrollment_id_selected;
 CALL DeleteEnrollment(:enrollment_id_selected);
 
------
 -- CLASSES_EQUIPMENT PAGE
------
 
 -- SELECT: list which equipment is assigned to which class
 SELECT Classes_Equipment.class_equipment_id, Classes.class_name, Equipment_Records.item_name
