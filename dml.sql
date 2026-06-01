@@ -90,16 +90,18 @@ CALL DeleteClass(:class_id_selected);
 SELECT * FROM Equipment_Records;
 
 -- CREATE: log a new piece of equipment
-INSERT INTO Equipment_Records (item_name, maintenance_status, purchase_date, location)
-VALUES (:item_name_input, :maintenance_status_input, :purchase_date_input, :location_input);
+--INSERT INTO Equipment_Records (item_name, maintenance_status, purchase_date, location)
+--VALUES (:item_name_input, :maintenance_status_input, :purchase_date_input, :location_input);
+CALL sp_CreateEquipment(:item_name_input, :maintenance_status_dropdown, :purchase_date_input, :location_input);
 
 -- UPDATE: edit equipment details
-UPDATE Equipment_Records
-SET item_name = :item_name_input,
-    maintenance_status = :maintenance_status_input,
-    purchase_date = :purchase_date_input,
-    location = :location_input
-WHERE equipment_id = :equipment_id_selected_from_table;
+--UPDATE Equipment_Records
+--SET item_name = :item_name_input,
+--    maintenance_status = :maintenance_status_input,
+--    purchase_date = :purchase_date_input,
+--    location = :location_input
+--WHERE equipment_id = :equipment_id_selected_from_table;
+CALL sp_UpdateEquipment(:equipment_id_selected, :item_name_input, :maintenance_status_dropdown, :location_input);
 
 -- DELETE: remove an equipment record
 -- (original for reference)

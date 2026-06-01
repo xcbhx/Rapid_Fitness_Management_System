@@ -15,6 +15,12 @@
 // implementation correctly handle user input, null values, and ensure secure insertion of trainer data?
 // AI Source URL: https://copilot.microsoft.com/
 
+// Citation for use of AI tools:
+// Date: 06/01/2026
+// Prompts used to help with parameter collisions and empty input string handling
+// why does leaving a web form input blank end up wiping out or clearing existing table data during an update
+// and how can we design a stored procedure that can isolate and update data
+// AI Source URL: https://copilot.microsoft.com/
 
 /*
     SETUP
@@ -297,7 +303,14 @@ app.post('/add-member', function(req, res) {
     try {
         let data = req.body;
         let query = "CALL sp_CreateMember(?, ?, ?, ?, ?, ?)";
-        let values = [data['input-fname'], data['input-lname'], data['input-email'], data['input-phone'], data['input-start-date'], data['input-trainer']];
+        let values = [
+            data['input-fname'],
+            data['input-lname'],
+            data['input-email'],
+            data['input-phone'],
+            data['input-start-date'],
+            data['input-trainer']
+        ];
 
         db.pool.query(query, values, function(error, rows, fields) {
             if (error) { console.log(error); res.sendStatus(400); }
@@ -363,6 +376,51 @@ app.get('/equipment_records', function(req, res) {
     });
 });
 
+// POST route to add equipment record
+app.post('/add-equipment', function(req, res) {
+    let data = req.body;
+
+    let query = `CALL sp_CreateEquipment(?, ?, ?, ?)`;
+    let values = [
+        data['item_name'],
+        data['maintenance_status'],
+        data['purchase_date'],
+        data['location']
+    ];
+
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Add Equipment Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment_records');
+        }
+    });
+});
+
+// POST route to update equipment record
+app.post('/update-equipment', function(req, res) {
+    let data = req.body;
+
+    let query = `CALL sp_UpdateEquipment(?, ?, ?, ?)`;
+    let values = [
+        parseInt(data['update-id']),
+        data['update-name'],       // Sends '' if blank
+        data['update-status'],     // Sends dropdown selection
+        data['update-location']    // Sends '' if blank
+    ];
+
+    // 2. Execute the procedure call
+    db.pool.query(query, values, function(error, rows, fields) {
+        if (error) {
+            console.log("Update Equipment Error:", error);
+            res.sendStatus(400);
+        } else {
+            res.redirect('/equipment_records');
+        }
+    });
+});
+
 // POST to delete equipment_records
 app.post('/delete-equipment', function(req, res) {
     let data = req.body;
@@ -372,48 +430,6 @@ app.post('/delete-equipment', function(req, res) {
     db.pool.query(query, [equipID], function(error, rows, fields) {
         if (error) {
             console.log("Delete Equipment Error:", error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/equipment_records');
-        }
-    });
-});
-
-// POST Route to add new equipment
-app.post('/add-equipment', function(req, res) {
-    let data = req.body;
-    let query1 = `INSERT INTO Equipment_Records (item_name, maintenance_status, purchase_date, location)
-                  VALUES (?, ?, ?, ?)`;
-    let values = [data.item_name, data.maintenance_status, data.purchase_date, data.location];
-
-    db.pool.query(query1, values, function(error, rows, fields) {
-        if (error) {
-            console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/equipment_records');
-        }
-    });
-});
-
-// POST to UPDATE Equipment
-app.post('/update-equipment', function(req, res) {
-    let data = req.body;
-
-    let equipmentID = parseInt(data['update-id']);
-    let name = data['update-name'];
-    let status = data['update-status'];
-    let location = data['update-location'];
-
-    let query = `UPDATE Equipment_Records
-                 SET item_name = ?, maintenance_status = ?, location = ?
-                 WHERE equipment_id = ?`;
-
-    let values = [name, status, location, equipmentID];
-
-    db.pool.query(query, values, function(error, rows, fields) {
-        if (error) {
-            console.log("Update Error:", error);
             res.sendStatus(400);
         } else {
             res.redirect('/equipment_records');
