@@ -122,10 +122,15 @@ app.post('/trainers/create', async function (req, res) {
 app.post('/trainers/update', async function(req, res) {
     try {
         let data = req.body;
+        console.log(req.body);
 
         // Convert invalid hourly rate to NULL
         if (isNaN(parseFloat(data.update_trainer_hourly_rate))) {
             data.update_trainer_hourly_rate = null;
+        }
+
+        if (!data.update_trainer_specialization) {
+            data.update_trainer_specialization = '';
         }
 
         let query = `

@@ -16,15 +16,14 @@ DROP PROCEDURE IF EXISTS sp_CreateTrainers;
 
 DELIMITER //
 CREATE PROCEDURE sp_CreateTrainers(
-    IN first_name VARCHAR(50),
-    IN last_name VARCHAR(50),
-    IN specialization VARCHAR(100),
-    IN hourly_rate DECIMAL(19,2)
+    IN p_fname VARCHAR(50),
+    IN p_lname VARCHAR(50),
+    IN p_specialization VARCHAR(100),
+    IN p_hourly_rate DECIMAL(19,2)
 )
 BEGIN
     INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
-
-    VALUES (first_name, last_name, specialization, hourly_rate);
+    VALUES (p_fname, p_lname, p_specialization, p_hourly_rate);
 
     -- Display the ID of the last inserted trainer.
     SELECT LAST_INSERT_ID() AS 'new_id';
@@ -37,24 +36,24 @@ DROP PROCEDURE IF EXISTS sp_UpdateTrainers;
 
 DELIMITER //
 CREATE PROCEDURE sp_UpdateTrainers(
-    IN trainer_id_input INT,
-    IN first_name VARCHAR(50),
-    IN last_name VARCHAR(50),
-    IN specialization VARCHAR(100),
-    IN hourly_rate DECIMAL(19,2)
+    IN p_trainer_id INT,
+    IN p_fname VARCHAR(50),
+    IN p_lname VARCHAR(50),
+    IN p_specialization VARCHAR(100),
+    IN p_hourly_rate DECIMAL(19,2)
 )
 
 BEGIN
     UPDATE Trainers
-    SET first_name = COALESCE(NULLIF(trainer_first_name, ''), first_name),
-        last_name = COALESCE(NULLIF(trainer_last_name, ''), last_name),
-        specialization = COALESCE(NULLIF(trainer_specialization, ''), specialization),
-        hourly_rate = COALESCE(trainer_hourly_rate, hourly_rate)
-    WHERE trainer_id = trainer_id_input;
+    SET first_name = COALESCE(NULLIF(p_fname, ''), first_name),
+        last_name = COALESCE(NULLIF(p_lname, ''), last_name),
+        specialization = COALESCE(NULLIF(p_specialization, ''), specialization),
+        hourly_rate = COALESCE(p_hourly_rate, hourly_rate)
+    WHERE trainer_id = p_trainer_id;
 
 END //
-
 DELIMITER ;
+
 -- CREATE Member
 DROP PROCEDURE IF EXISTS sp_CreateMember;
 DELIMITER //
