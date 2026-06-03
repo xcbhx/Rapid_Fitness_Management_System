@@ -582,6 +582,28 @@ app.get('/classes_equipment', function (req, res) {
     });
 });
 
+// CREATE Classes_Equipment
+app.post('/classes_equipment/create', async function(req, res) {
+    try {
+        let data = req.body;
+
+        let query = `CALL sp_CreateClassesEquipment(?, ?)`;
+        let values = [
+            data.input_class,
+            data.input_equipment
+        ];
+
+        await db.pool.promise().query(query, values);
+
+        console.log(`Created assignment: Class ${data.input_class} -> Equipment ${data.input_equipment}`);
+
+        res.redirect('/classes_equipment');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error creating class equipment assignment');
+    }
+});
+
 // UPDATE Classes_Equipment
 app.post('/classes_equipment/update', async function(req, res) {
     try {
@@ -598,7 +620,7 @@ app.post('/classes_equipment/update', async function(req, res) {
         }
 
         let query = `
-            CALL sp_UpdateClassEquipment(?, ?, ?);
+            CALL sp_UpdateClassesEquipment(?, ?, ?);
         `;
 
         let values = [
@@ -627,7 +649,7 @@ app.post('/classes_equipment/update', async function(req, res) {
 app.post('/delete-class-equipment', function(req, res) {
     let data = req.body;
     let ceID = parseInt(data['class_equipment_id']);
-    let query = `CALL DeleteClassEquipment(?)`;
+    let query = `CALL DeleteClassesEquipment(?)`;
 
     db.pool.query(query, [ceID], function(error, rows, fields) {
         if (error) {
@@ -657,11 +679,6 @@ app.post('/reset-database', function(req, res) {
     }
 });
 
-// Dummy placeholder routes to prevent crashes during grading
-
-app.post('/add_class_equipment', function(req, res) {
-    res.redirect('/classes_equipment');
-});
 
 /*
     LISTENER
