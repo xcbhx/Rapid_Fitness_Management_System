@@ -259,33 +259,49 @@ BEGIN
 END //
 DELIMITER ;
 
--- UPDATE Classes_Equipment
-DROP PROCEDURE IF EXISTS sp_UpdateClassEquipment;
+-- CREATE Classes_Equipment
+DROP PROCEDURE IF EXISTS sp_CreateClassesEquipment;
 
 DELIMITER //
 
-CREATE PROCEDURE sp_UpdateClassEquipment(
-    IN class_equipment_id INT,
-    IN class_id INT,
-    IN equipment_id INT
+CREATE PROCEDURE sp_CreateClassesEquipment(
+    IN p_class_id INT,
+    IN p_equipment_id INT
 )
 
 BEGIN
-
-    UPDATE Classes_Equipment
-    SET class_id = COALESCE(ce_class_id, class_id),
-        equipment_id = COALESCE(ce_equipment_id, equipment_id)
-    WHERE class_equipment_id = ce_class_equipment_id;
+    INSERT INTO Classes_Equipment (class_id, equipment_id)
+    VALUES (p_class_id, p_equipment_id);
 
 END //
+DELIMITER ;
 
+
+-- UPDATE Classes_Equipment
+DROP PROCEDURE IF EXISTS sp_UpdateClassesEquipment;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_UpdateClassesEquipment(
+    IN p_class_equipment_id INT,
+    IN p_class_id INT,
+    IN p_equipment_id INT
+)
+
+BEGIN
+    UPDATE Classes_Equipment
+    SET class_id = COALESCE(p_class_id, class_id),
+        equipment_id = COALESCE(p_equipment_id, equipment_id)
+    WHERE class_equipment_id = p_class_equipment_id;
+
+END //
 DELIMITER ;
 
 -- DELETE Classes_Equipment assignment
-DROP PROCEDURE IF EXISTS DeleteClassEquipment;
+DROP PROCEDURE IF EXISTS DeleteClassesEquipment;
 DELIMITER //
 
-CREATE PROCEDURE DeleteClassEquipment(IN ce_id_param INT)
+CREATE PROCEDURE DeleteClassesEquipment(IN ce_id_param INT)
 BEGIN
     DELETE FROM Classes_Equipment WHERE class_equipment_id = ce_id_param;
 END //
