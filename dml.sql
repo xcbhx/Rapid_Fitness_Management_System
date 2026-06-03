@@ -107,14 +107,10 @@ JOIN Classes ON Classes_Equipment.class_id = Classes.class_id
 JOIN Equipment_Records ON Classes_Equipment.equipment_id = Equipment_Records.equipment_id;
 
 -- INSERT: assign equipment to a class
-INSERT INTO Classes_Equipment (class_id, equipment_id)
-VALUES (:class_id_from_dropdown, :equipment_id_from_dropdown);
+CALL sp_CreateClassesEquipment(:class_id_from_dropdown, :equipment_id_from_dropdown);
 
 -- UPDATE: change the equipment assigned to a class
-UPDATE Classes_Equipment
-SET class_id = :class_id_from_dropdown,
-    equipment_id = :equipment_id_from_dropdown
-WHERE class_equipment_id = :class_equipment_id_selected_from_table;
+CALL sp_UpdateClassesEquipment(:class_equipment_id_selected_from_table, :class_id_from_dropdown, :equipment_id_from_dropdown);
 
 -- DELETE: remove an equipment assignment from a class
 
