@@ -80,7 +80,7 @@ app.post('/trainers/create', async function (req, res) {
         // Parse frontend form information
         let data = req.body;
 
-        // Validate inout before DB call
+        // Validate input before DB call
         if (!data.create_trainer_first_name?.trim() ||
             !data.create_trainer_last_name?.trim()) {
             return res.status(400).send("First and last name are required");
@@ -151,7 +151,7 @@ app.post('/trainers/update', async function(req, res) {
 
     } catch (error) {
         console.log(error);
-        res.status(500).send("Error updating trainer");
+        res.status(500).send('Error updating trainer');
     }
 });
 
@@ -159,7 +159,7 @@ app.post('/trainers/update', async function(req, res) {
 app.post('/delete-trainer', function(req, res) {
     let data = req.body;
     let trainerID = parseInt(data['trainer_id']);
-    let query = `CALL DeleteTrainer(?)`;
+    let query = `CALL sp_DeleteTrainer(?)`;
 
     db.pool.query(query, [trainerID], function(error, rows, fields) {
         if (error) {
@@ -215,55 +215,69 @@ app.get('/classes', function(req, res) {
     });
 });
 
-// POST route to Add Class
-app.post('/add_class', function(req, res) {
-    let data = req.body;
-    let query = "CALL sp_CreateClass(?, ?, ?, ?)";
-    let values = [
-        data['input_class_name'],
-        data['input_max_capacity'],
-        data['input_trainer_id'],
-        data['input_room_location']
-    ];
+// CREATE Classes Route
+app.post('/classes/create', async function(req, res) {
+    try {
+        let data = req.body;
+        let query = `CALL sp_CreateClass(?, ?, ?, ?)`;
+        let values = [
+            data.create_class_name,
+            data.create_max_capacity,
+            data.create_trainer_id,
+            data.create_room_location
+        ];
 
-    db.pool.query(query, values, function(error, rows, fields) {
-        if (error) {
-            console.log(error);
-            res.sendStatus(400);
-        }else {
-            res.redirect('/classes');
-        }
-    });
+        await db.pool.promise().query(query, values);
+
+        res.redirect('/classes');
+
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        res.status(500).send(
+            'An error occurred while creating a class.'
+        );
+    }
 });
 
 // POST route to Update Class
-app.post('/update_class', function(req, res) {
-    let data = req.body;
+app.post('/classes/update', async function(req, res) {
+    try {
+        let data = req.body;
 
-    let query = "CALL sp_UpdateClass(?, ?, ?, ?, ?)";
-    let values = [
-        data['update_class_id'],
-        data['update_class_name'],
-        data['update_class_max_capacity'],
-        data['update_class_trainer_id'],
-        data['update_room_location']
-    ];
+        let maxCapacity = 
+            data.update_class_max_capacity === '' 
+                ? null 
+                : data.update_class_max_capacity;
 
-    db.pool.query(query, values, function(error, rows, fields) {
-        if (error) {
-            console.log(error);
-            res.sendStatus(400);
-        }else {
-            res.redirect('/classes');
-        }
-    });
+        let trainerId = 
+            data.update_class_trainer_id === ''
+                ? null
+                : data.update_class_trainer_id;
+    
+        let query = "CALL sp_UpdateClass(?, ?, ?, ?, ?)";
+        let values = [
+            data.update_class_id,
+            data.update_class_name,
+            maxCapacity,
+            trainerId,
+            data.update_room_location
+        ];
+
+        await db.pool.promise().query(query, values);
+
+        res.redirect('/classes');
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error updating class');
+    }
 });
 
 // POST to delete Class
 app.post('/delete-class', function(req, res) {
     let data = req.body;
     let classID = parseInt(data['class_id']);
-    let query = `CALL DeleteClass(?)`;
+    let query = `CALL sp_DeleteClass(?)`;
 
     db.pool.query(query, [classID], function(error, rows, fields) {
         if (error) {
@@ -649,7 +663,7 @@ app.post('/classes_equipment/update', async function(req, res) {
 app.post('/delete-class-equipment', function(req, res) {
     let data = req.body;
     let ceID = parseInt(data['class_equipment_id']);
-    let query = `CALL DeleteClassesEquipment(?)`;
+    let query = `CALL sp_DeleteClassesEquipment(?)`;
 
     db.pool.query(query, [ceID], function(error, rows, fields) {
         if (error) {

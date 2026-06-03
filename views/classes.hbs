@@ -29,13 +29,12 @@
             <td>{{this.room_location}}</td>
 
             <td>
-            {{!-- DELETE Class Form--}}
-            <form class="delete_class_form" action="/delete-class" method="POST">
-                <input type="hidden" name="class_id" value="{{this.class_id}}" />
-                <input type="hidden" name="class_name" value="{{this.class_name}}" />
-                <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Remove this class?')">
-                </td>
-            </form>
+                {{!-- DELETE Class Form--}}
+                <form class="delete_class_form" action="/delete-class" method="POST">
+                    <input type="hidden" name="class_id" value="{{this.class_id}}" />
+                    <input type="hidden" name="class_name" value="{{this.class_name}}" />
+                    <input type="submit" value="Delete" class="btn-reset" onclick="return confirm('Remove this class?')">
+                </form>
             </td>
         </tr>
         {{/each}}
@@ -44,30 +43,30 @@
 
 {{!-- CREATE Class Form --}}
 <h2>Add a Class</h2>
-<form id="add_class_form" action="/add_class" method="POST">
-    <label for="input_class_name">Class Name: </label>
-    <input type="text" name="input_class_name" id="input_class_name" required>
+<form id="create_class_form" action="/classes/create" method="POST">
+    <label for="create_class_name">Class Name: </label>
+    <input type="text" name="create_class_name" id="create_class_name" required>
 
-    <label for="input_max_capacity">Max Capacity: </label>
-    <input type="number" name="input_max_capacity" id="input_max_capacity" required>
+    <label for="create_max_capacity">Max Capacity: </label>
+    <input type="number" name="create_max_capacity" id="create_max_capacity" required>
 
-    <label for="input_trainer_id">Trainer: </label>
-    <select name="input_trainer_id" id="input_trainer_id">
+    <label for="create_trainer_id">Trainer: </label>
+    <select name="create_trainer_id" id="create_trainer_id">
         <option value="0">None</option>
         {{#each trainers}}
         <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}}</option>
         {{/each}}
     </select>
 
-    <label for="input_room_location">Room: </label>
-    <input type="text" name="input_room_location" id="input_room_location" required>
+    <label for="create_room_location">Room: </label>
+    <input type="text" name="create_room_location" id="create_room_location" required>
 
     <input type="submit" value="Add Class">
 </form>
 
 {{!-- UPDATE Class Form --}}
 <h2>Update a Class</h2>
-<form id="update_class_form" action="/update_class" method="POST">
+<form id="update_class_form" action="/classes/update" method="POST">
     <label for="update_class_id">Class to Update: </label>
     <select name="update_class_id" id="update_class_id" required>
         <option value="" disabled selected>Select a Class: </option>
@@ -92,7 +91,7 @@
         {{!-- Keep exisiting trainer --}}
         <option value="" selected>Keep Current Trainer </option>
         {{!-- Remove trainer --}}
-        <option value="NULL">Remove Trainer </option>
+        <option value="-1">Remove Trainer </option>
         {{!-- Assign a different trainer --}}
         {{#each trainers}}
         <option value="{{this.trainer_id}}">{{this.first_name}} {{this.last_name}} </option>
@@ -102,5 +101,5 @@
     <label for="update_room_location">Room Location: </label>
     <input type="text" name="update_room_location" id="update_room_location" />
 
-    <button type="submit">Update Class</button>
+    <input type="submit" value="Update Class">
 </form>

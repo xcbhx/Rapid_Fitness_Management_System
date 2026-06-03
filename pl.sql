@@ -54,6 +54,18 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Procedure to DELETE trainer --
+DROP PROCEDURE IF EXISTS sp_DeleteTrainer;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_DeleteTrainer(IN trainer_id_param INT)
+BEGIN
+    DELETE FROM Trainers WHERE trainer_id = trainer_id_param;
+END //
+
+DELIMITER ;
+
 -- CREATE Member
 DROP PROCEDURE IF EXISTS sp_CreateMember;
 DELIMITER //
@@ -96,25 +108,13 @@ END //
 DELIMITER ;
 
 -- drop the delete procedure if exists
-DROP PROCEDURE IF EXISTS DeleteMember;
+DROP PROCEDURE IF EXISTS sp_DeleteMember;
 DELIMITER //
 
  -- DELETE Member --
-CREATE PROCEDURE DeleteMember(IN member_id_param INT)
+CREATE PROCEDURE sp_DeleteMember(IN member_id_param INT)
 BEGIN
     DELETE FROM Members WHERE member_id = member_id_param;
-END //
-
-DELIMITER ;
-
--- Procedure to DELETE trainer --
-DROP PROCEDURE IF EXISTS DeleteTrainer;
-
-DELIMITER //
-
-CREATE PROCEDURE DeleteTrainer(IN trainer_id_param INT)
-BEGIN
-    DELETE FROM Trainers WHERE trainer_id = trainer_id_param;
 END //
 
 DELIMITER ;
@@ -158,6 +158,7 @@ BEGIN
 END //
 
 DELIMITER ;
+
 -- CREATE Class
 DROP PROCEDURE IF EXISTS sp_CreateClass;
 DELIMITER //
@@ -194,9 +195,9 @@ END //
 DELIMITER ;
 
 -- Delete Class
-DROP PROCEDURE IF EXISTS DeleteClass;
+DROP PROCEDURE IF EXISTS sp_DeleteClass;
 DELIMITER //
-CREATE PROCEDURE DeleteClass(IN class_id_param INT)
+CREATE PROCEDURE sp_DeleteClass(IN class_id_param INT)
 BEGIN
     DELETE FROM Classes WHERE class_id = class_id_param;
 END //
@@ -298,10 +299,10 @@ END //
 DELIMITER ;
 
 -- DELETE Classes_Equipment assignment
-DROP PROCEDURE IF EXISTS DeleteClassesEquipment;
+DROP PROCEDURE IF EXISTS sp_DeleteClassesEquipment;
 DELIMITER //
 
-CREATE PROCEDURE DeleteClassesEquipment(IN ce_id_param INT)
+CREATE PROCEDURE sp_DeleteClassesEquipment(IN ce_id_param INT)
 BEGIN
     DELETE FROM Classes_Equipment WHERE class_equipment_id = ce_id_param;
 END //
