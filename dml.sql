@@ -55,7 +55,7 @@ SET class_name = :class_name_input,
 CALL sp_UpdateClass(:class_id_selected, :class_name_input, :max_capacity_input, :trainer_id_input, :room_location_input);
 
 -- DELETE: cancel a class
-CALL DeleteClass(:class_id_selected);
+CALL sp_DeleteClass(:class_id_selected);
 
 
 -- EQUIPMENT PAGE
@@ -71,7 +71,7 @@ CALL sp_CreateEquipment(:item_name_input, :maintenance_status_dropdown, :purchas
 CALL sp_UpdateEquipment(:equipment_id_selected, :item_name_input, :maintenance_status_dropdown, :location_input);
 
 -- DELETE: remove an equipment record
-CALL DeleteEquipment(:equipment_id_selected_from_table);
+CALL sp_DeleteEquipment(:equipment_id_selected_from_table);
 
 
 -- ENROLLMENTS PAGE
@@ -90,7 +90,7 @@ CALL sp_CreateEnrollment(:member_id_from_dropdown, :class_id_from_dropdown);
 CALL sp_UpdateEnrollment(:enrollment_id_selected, :member_id_from_dropdown, :class_id_from_dropdown);
 
 -- DELETE: remove a member's enrollment
-CALL DeleteEnrollment(:enrollment_id_selected);
+CALL sp_DeleteEnrollment(:enrollment_id_selected);
 
 -- CLASSES_EQUIPMENT PAGE
 
@@ -108,4 +108,4 @@ CALL sp_UpdateClassesEquipment(:class_equipment_id_selected_from_table, :class_i
 
 -- DELETE: remove an equipment assignment from a class
 
-CALL DeleteClassEquipment(:class_equipment_id_selected);
+CALL sp_DeleteClassEquipment(:class_equipment_id_selected);
