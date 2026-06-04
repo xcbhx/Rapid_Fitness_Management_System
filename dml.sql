@@ -7,19 +7,13 @@
 SELECT * FROM Trainers;
 
 -- INSERT: add a new trainer
-INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
-VALUES (:first_name_input, :last_name_input, :specialization_input, :hourly_rate_input);
+CALL sp_CreateTrainers(:first_name_input, :last_name_input, :specialization_input, :hourly_rate_input);
 
 -- UPDATE: edit trainer details
-UPDATE Trainers
-SET first_name = :first_name_input,
-    last_name = :last_name_input,
-    specialization = :specialization_input,
-    hourly_rate = :hourly_rate_input
-WHERE trainer_id = :trainer_id_selected_from_table;
+CALL sp_UpdateTrainers(:trainer_id_selected_from_table, :first_name_input, :last_name_input, :specialization_input, :hourly_rate_input);
 
 -- DELETE: remove a trainer
-CALL DeleteTrainer(:trainer_id_selected_from_table);
+CALL sp_DeleteTrainer(:trainer_id_selected_from_table);
 
 
 -- MEMBERS PAGE
@@ -41,7 +35,7 @@ CALL sp_CreateMember(:first_name_input, :last_name_input, :email_input, :phone_i
 CALL sp_UpdateMember(:member_id_selected, :fname_input, :lname_input, :email_input, :phone_input, :trainer_id_input);
 
 -- DELETE: remove a member from the database
-CALL DeleteMember(:member_id_selected_from_table);
+CALL sp_DeleteMember(:member_id_selected_from_table);
 
 
 -- CLASSES PAGE
