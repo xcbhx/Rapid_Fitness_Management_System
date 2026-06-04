@@ -50,7 +50,10 @@ app.set('view engine', '.hbs'); // Use handlebars engine for *.hbs files.
 
 app.get('/', async function (req, res) {
     try {
-        res.render('home'); // Render the home.hbs file
+        res.render('home', {
+            homePage: true
+        }); // Render the home.hbs file
+
     } catch (error) {
         console.error('Error rendering page:', error);
         // Send a generic error message to the browser
@@ -68,7 +71,10 @@ app.get('/trainers', function(req, res) {
             console.log(error);
             return res.status(400).send(error);
         } else {
-            res.render('trainers', { trainers: rows });
+            res.render('trainers', { 
+                trainers: rows,
+                trainersPage: true
+            });
         }
     });
 });
@@ -209,7 +215,8 @@ app.get('/classes', function(req, res) {
 
             res.render('classes', {
                 classes: classes,
-                trainers: trainers
+                trainers: trainers,
+                classesPage: true
             });
         });
     });
@@ -312,7 +319,11 @@ app.get('/members', function(req, res) {
                 return res.sendStatus(400);
             }
             let trainers = rows;
-            res.render('members', { members: members, trainers: trainers });
+            res.render('members', { 
+                members: members, 
+                trainers: trainers,
+                membersPage: true
+            });
         });
     });
 });
@@ -390,7 +401,10 @@ app.get('/equipment_records', function(req, res) {
             res.sendStatus(400);
         } else {
             // Render equipment_records.hbs and pass the rows as data
-            res.render('equipment_records', { equipment_records: rows });
+            res.render('equipment_records', { 
+                equipment_records: rows,
+                equipmentRecordsPage: true 
+            });
         }
     });
 });
@@ -489,7 +503,8 @@ app.get('/enrollments', function(req, res) {
                 res.render('enrollments', {
                     enrollments: enrollments,
                     members: members,
-                    classes: classes
+                    classes: classes,
+                    enrollmentsPage: true
                 });
             });
         });
@@ -589,7 +604,8 @@ app.get('/classes_equipment', function (req, res) {
                 res.render('classes_equipment', {
                     data: browseRows, //sends the table data
                     classes: classRows, // sends class dropdown data
-                    equipment_records: equipmentRows // sends equipment dropdown data
+                    equipment_records: equipmentRows, // sends equipment dropdown data
+                    classesEquipmentPage: true
                 });
             });
         });
