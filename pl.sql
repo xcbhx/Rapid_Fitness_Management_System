@@ -22,7 +22,12 @@ CREATE PROCEDURE sp_CreateTrainers(
     IN p_hourly_rate DECIMAL(19,2)
 )
 BEGIN
-    INSERT INTO Trainers (first_name, last_name, specialization, hourly_rate)
+    INSERT INTO Trainers (
+        first_name,
+        last_name,
+        specialization,
+        hourly_rate
+    )
     VALUES (p_fname, p_lname, p_specialization, p_hourly_rate);
 
     -- Display the ID of the last inserted trainer.
@@ -87,7 +92,6 @@ DELIMITER ;
 -- UPDATE Member
 DROP PROCEDURE IF EXISTS sp_UpdateMember;
 DELIMITER //
-
 CREATE PROCEDURE sp_UpdateMember(
     IN p_member_id INT,
     IN p_fname VARCHAR(50),
@@ -102,7 +106,11 @@ BEGIN
         last_name = COALESCE(NULLIF(p_lname, ''), last_name),
         email = COALESCE(NULLIF(p_email, ''), email),
         phone_number = COALESCE(NULLIF(p_phone, ''), phone_number),
-        trainer_id = CASE WHEN p_trainer_id = -1 THEN NULL ELSE COALESCE(p_trainer_id, trainer_id) END
+        trainer_id = CASE
+            WHEN p_trainer_id = -1 THEN NULL
+            WHEN p_trainer_id IS NULL THEN trainer_id
+            ELSE p_trainer_id
+        END
     WHERE member_id = p_member_id;
 END //
 DELIMITER ;

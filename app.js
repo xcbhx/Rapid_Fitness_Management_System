@@ -71,7 +71,7 @@ app.get('/trainers', function(req, res) {
             console.log(error);
             return res.status(400).send(error);
         } else {
-            res.render('trainers', { 
+            res.render('trainers', {
                 trainers: rows,
                 trainersPage: true
             });
@@ -251,16 +251,16 @@ app.post('/classes/update', async function(req, res) {
     try {
         let data = req.body;
 
-        let maxCapacity = 
-            data.update_class_max_capacity === '' 
-                ? null 
+        let maxCapacity =
+            data.update_class_max_capacity === ''
+                ? null
                 : data.update_class_max_capacity;
 
-        let trainerId = 
+        let trainerId =
             data.update_class_trainer_id === ''
                 ? null
                 : data.update_class_trainer_id;
-    
+
         let query = "CALL sp_UpdateClass(?, ?, ?, ?, ?)";
         let values = [
             data.update_class_id,
@@ -319,8 +319,8 @@ app.get('/members', function(req, res) {
                 return res.sendStatus(400);
             }
             let trainers = rows;
-            res.render('members', { 
-                members: members, 
+            res.render('members', {
+                members: members,
                 trainers: trainers,
                 membersPage: true
             });
@@ -350,28 +350,32 @@ app.post('/add-member', function(req, res) {
 });
 
 // POST to UPDATE member
-app.post('/update-member', function(req, res) {
-    let data = req.body;
+app.post('/update-member', async function(req, res) {
+    try {
+        let data = req.body;
 
-    let query = `CALL sp_UpdateMember(?, ?, ?, ?, ?, ?)`;
+        let memberID = parseInt(data['update-id']);
+        let fname = data['update-fname'] || '';
+        let lname = data['update-lname'] || '';
+        let email = data['update-email'] || '';
+        let phone = data['update-phone'] || '';
 
-    let values = [
-        data['update-id'],    // p_member_id
-        data['update-fname'], // p_fname
-        data['update-lname'], // p_lname
-        data['update-email'], // p_email
-        data['update-phone'], // p_phone
-        data['update-trainer'] // p_trainer (will pass -1 if 'None' is picked)
-    ];
-
-    db.pool.query(query, values, function(error, rows, fields) {
-        if (error) {
-            console.log("Update Member Error:", error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/members');
+        let trainerID = null; // Defaults to null (keep current)
+        if (data['update-trainer'] === '-1') {
+            trainerID = -1;
+        } else if (data['update-trainer'] && data['update-trainer'] !== '') {
+            trainerID = parseInt(data['update-trainer']); // specific new trainer
         }
-    });
+
+        let query = `CALL sp_UpdateMember(?, ?, ?, ?, ?, ?)`;
+        let values = [memberID, fname, lname, email, phone, trainerID];
+
+        await db.pool.promise().query(query, values);
+        res.redirect('/members');
+    } catch (error) {
+        console.log("Update Member Error:", error);
+        res.status(500).send("Error updating member");
+    }
 });
 
 // POST route to delete member
@@ -401,9 +405,9 @@ app.get('/equipment_records', function(req, res) {
             res.sendStatus(400);
         } else {
             // Render equipment_records.hbs and pass the rows as data
-            res.render('equipment_records', { 
+            res.render('equipment_records', {
                 equipment_records: rows,
-                equipmentRecordsPage: true 
+                equipmentRecordsPage: true
             });
         }
     });
