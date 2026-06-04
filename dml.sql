@@ -1,5 +1,5 @@
 -- Group 2: Ceina Ellison, Eman Alturky
-
+-- Description: Original DML script containing initial sample data.
 
 -- TRAINERS PAGE
 
