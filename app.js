@@ -462,7 +462,7 @@ app.post('/update-equipment', function(req, res) {
 app.post('/delete-equipment', function(req, res) {
     let data = req.body;
     let equipID = parseInt(data['equipment_id']);
-    let query = `CALL DeleteEquipment(?)`;
+    let query = `CALL sp_DeleteEquipment(?)`;
 
     db.pool.query(query, [equipID], function(error, rows, fields) {
         if (error) {
@@ -561,7 +561,7 @@ app.post('/delete-enrollment', function(req, res) {
     let data = req.body;
     let enrollmentID = parseInt(data['enrollment_id']);
 
-    let query = `CALL DeleteEnrollment(?)`;
+    let query = `CALL sp_DeleteEnrollment(?)`;
 
     db.pool.query(query, [enrollmentID], function(error, rows, fields) {
         if (error) {

@@ -157,10 +157,10 @@ END //
 DELIMITER ;
 
 -- Procedure to DELETE enrollment
-DROP PROCEDURE IF EXISTS DeleteEnrollment;
+DROP PROCEDURE IF EXISTS sp_DeleteEnrollment;
 DELIMITER //
 
-CREATE PROCEDURE DeleteEnrollment(IN enrollment_id_param INT)
+CREATE PROCEDURE sp_DeleteEnrollment(IN enrollment_id_param INT)
 BEGIN
     DELETE FROM Enrollments WHERE enrollment_id = enrollment_id_param;
 END //
@@ -260,9 +260,9 @@ END //
 DELIMITER ;
 
 -- Delete Equipment_Records
-DROP PROCEDURE IF EXISTS DeleteEquipment;
+DROP PROCEDURE IF EXISTS sp_DeleteEquipment;
 DELIMITER //
-CREATE PROCEDURE DeleteEquipment(IN equipment_id_param INT)
+CREATE PROCEDURE sp_DeleteEquipment(IN equipment_id_param INT)
 BEGIN
     DELETE FROM Equipment_Records WHERE equipment_id = equipment_id_param;
 END //
