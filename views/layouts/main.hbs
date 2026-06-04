@@ -7,13 +7,13 @@
 </head>
 <body>
     <nav>
-        <a href="/">Home</a>
-        <a href="/trainers">Trainers</a>
-        <a href="/members">Members</a>
-        <a href="/classes">Classes</a>
-        <a href="/classes_equipment">Classes and Equipment</a>
-        <a href="/enrollments">Enrollments</a>
-        <a href="/equipment_records">Equipment Records</a>
+        <a href="/" class="{{#if homePage}}active{{/if}}">Home</a>
+        <a href="/trainers" class="{{#if trainersPage}}active{{/if}}">Trainers</a>
+        <a href="/members" class="{{#if membersPage}}active{{/if}}">Members</a>
+        <a href="/classes" class="{{#if classesPage}}active{{/if}}">Classes</a>
+        <a href="/classes_equipment" class="{{#if classesEquipmentPage}}active{{/if}}">Classes and Equipment</a>
+        <a href="/enrollments" class="{{#if enrollmentsPage}}active{{/if}}">Enrollments</a>
+        <a href="/equipment_records" class="{{#if equipmentRecordsPage}}active{{/if}}">Equipment Records</a>
     </nav>
 
     {{{body}}}
