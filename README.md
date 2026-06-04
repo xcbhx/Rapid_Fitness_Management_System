@@ -57,3 +57,15 @@ The application will be accessible at http://classwork.engr.oregonstate.edu:5386
 
 **Artificial Intelligence Citations:**
 Throughout the implementation phase, artificial intelligence tools (Microsoft Copilot) was utilized to aid in designing complex database components. Specifically, these tools assisted in structuring the PL/SQL stored procedures (such as implementing `COALESCE` and `NULLIF` logic for partial updates) and debugging conditional edge cases for form submissions.
+
+* **Date:** 05/20/2026
+* **Purpose:** Designing initial PL/SQL stored procedures and app.js routes.
+* **Manual Refactoring:** Refactored generated code to enforce NOT NULL constraints on core entity attributes.
+
+* **Date:** 06/01/2026
+* **Purpose:** Debugging blank input handling and partial update logic.
+* **Manual Refactoring:** Manually implemented COALESCE/NULLIF pattern in PL/SQL to protect existing table data.
+
+* **Date:** 06/04/2026
+* **Purpose:** Resolving NaN parameter errors in intersection tables.
+* **Manual Refactoring:** Manually implemented !isNaN() validation in app.js to sanitize inputs before passing them to the MySQL CALL statements.

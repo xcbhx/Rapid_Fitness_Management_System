@@ -536,24 +536,33 @@ app.post('/add-enrollment', function(req, res) {
 });
 
 // POST UPDATE Enrollment
-app.post('/update-enrollment', function(req, res) {
-    let data = req.body;
+app.post('/update-enrollment', async function(req, res) {
+    try {
+        let data = req.body;
 
-    let query = `CALL sp_UpdateEnrollment(?, ?, ?)`;
-    let values = [
-        parseInt(data['update-id']),
-        data['update-member'] ? parseInt(data['update-member']) : null,
-        data['update-class'] ? parseInt(data['update-class']) : null
-    ];
+        let enrollmentID = parseInt(data['update-id']);
 
-    db.pool.query(query, values, function(error, rows, fields) {
-        if (error) {
-            console.log("Update Enrollment Error:", error);
-            res.sendStatus(400);
-        } else {
-            res.redirect('/enrollments');
+        let memberID = (data['update-member'] && !isNaN(parseInt(data['update-member'])))
+                        ? parseInt(data['update-member'])
+                        : null;
+
+        let classID = (data['update-class'] && !isNaN(parseInt(data['update-class'])))
+                        ? parseInt(data['update-class'])
+                        : null;
+
+        if (isNaN(enrollmentID)) {
+            throw new Error("Invalid Enrollment ID");
         }
-    });
+
+        let query = `CALL sp_UpdateEnrollment(?, ?, ?)`;
+        let values = [enrollmentID, memberID, classID];
+
+        await db.pool.promise().query(query, values);
+        res.redirect('/enrollments');
+    } catch (error) {
+        console.log("Update Enrollment Error:", error);
+        res.status(500).send("Error updating enrollment: " + error.message);
+    }
 });
 
 // POST route to delete an enrollment

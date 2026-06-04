@@ -66,7 +66,7 @@
     </select>
 
     <label for="update-member">New Member: </label>
-    <select name="update-member" id="update-member" required>
+    <select name="update-member" id="update-member">
         <option value="">Select a member</option>
         {{#each members}}
         <option value="{{this.member_id}}">{{this.first_name}} {{this.last_name}}</option>
@@ -74,7 +74,7 @@
     </select>
 
     <label for="update-class">New Class: </label>
-    <select name="update-class" id="update-class" required>
+    <select name="update-class" id="update-class">
         <option value="">Select a class</option>
         {{#each classes}}
         <option value="{{this.class_id}}">{{this.class_name}}</option>
