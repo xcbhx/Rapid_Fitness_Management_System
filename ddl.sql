@@ -1,4 +1,5 @@
 -- Group 2: Eman Alturky, Ceina Ellison
+-- Description: Original DDL design for project final submission.
 
 SET FOREIGN_KEY_CHECKS = 0;
 SET AUTOCOMMIT = 0;

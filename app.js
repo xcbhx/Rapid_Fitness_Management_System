@@ -22,6 +22,13 @@
 // and how can we design a stored procedure that can isolate and update data
 // AI Source URL: https://copilot.microsoft.com/
 
+// Citation for use of AI tools:
+// Date: 06/04/2026
+// Prompts used to help with Enrollments partial update and NaN parameter collisions:
+// how can I modify the app.post route to prevent 'NaN' errors when passing null values to stored procedures?
+// and how can I ensure partial updates for Enrollments maintain existing values using COALESCE?
+// AI Source URL: https://copilot.microsoft.com/
+
 /*
     SETUP
 */
