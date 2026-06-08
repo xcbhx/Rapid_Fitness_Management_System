@@ -1,3 +1,8 @@
+// Group 2: Ceina Ellison, Eman Alturky
+// Description: Express server application that manages page routing, form handling,
+// database interactions, and CRUD operations for all entities in the
+// Rapid Fitness Management System.
+
 // Citation for the following function:
 // Date: 05/07/2026
 // Copied from /OR/ Adapted from /OR/ Based on: Used the starter code

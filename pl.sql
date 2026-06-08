@@ -1,3 +1,7 @@
+-- Group 2: Ceina Ellison, Eman Alturky
+-- Description: Stored procedures implementing CRUD operations for all entities in the
+-- Rapid Fitness Management System database.
+
 -- Citation for the following function:
 -- Date: 05/20/2026
 -- Copied from /OR/ Adapted from /OR/ Based on: Used the starter code
